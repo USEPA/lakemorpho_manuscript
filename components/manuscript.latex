@@ -139,6 +139,10 @@ $if(lang)$
 \fi
 $endif$
 
+%jwh added to match pandoc tightlist function
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Changes borrowed from @cboettig, added by @jhollist 
 % A modified page layout 
