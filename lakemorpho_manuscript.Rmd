@@ -191,18 +191,34 @@ The mean width of a lake is defined as lake area divided by maximum lake length 
 # Throws an error if maximum lake length is missing
 lakeMeanWidth(example_lakeMorpho)
 # Add Maximum Lake Length
-lakeMaxLength(example_lakeMorpho,100,addLine = TRUE)
+lakeMaxLength(example_lakeMorpho, 100, addLine = TRUE)
 lakeMeanWidth(example_lakeMorpho)
 ```
 
 #### lakeMajorAxisLength
-Function to calculate major axis of the convex hull formed around the lake polygon
+The major axis of a lake is defined as the longest line intersecting the convex hull formed around its polygon while passing through its center. 
+
+```{r lakeMajorAxisLengthExample}
+lakeMajorAxisLength(example_lakeMorpho, addLine = TRUE)
+```
 
 #### lakeMinorAxisLength
-Function to calculate minor axis of the convex hull formed around the lake polygon
+The minor axis of a lake is defined as the shortest line intersecting the convex hull formed around the lake polygon while passing through its center.
+
+```{r lakeMinorAxisLengthExample}
+lakeMinorAxisLength(example_lakeMorpho, addLine = TRUE)
+```
 
 #### lakeMinorMajorRatio
-function to caluculate major:minor
+The ratio of the lake major axis length to the minor axis length is also known as the aspect ratio. Circular lakes have aspect ratios approaching 1 while thin-elongated lakes have aspect ratios approaching 0. If major and minor axis length have not already been added to the `lakeMoropho` object these are calculated. The `addLine` argument adds the lines for the lake's minor and major axes to the `lakeMorpho` object.
+
+```{r lakeMinorMajorRatioExample}
+lakeMinorMajorRatio(example_lakeMorpho, addLine = TRUE)
+```
+
+<!--
+Is lakeMinorMajorRatio less sensitive to map scale because it doesn't involve calculating shoreline length?
+-->
 
 #### lakeShorelineDevelopment	
 The shoreline development metric provides a measure of the complexity of the shoreline.  It is a ratio the perimeter of the lake to the perimeter of a circle of the same area.  Values will be 1 or greater with value of 1 indicating a circular lake.  This metric is used as an indicator of potential habitat [@lakewatch2001department].  It only requires a `lakeMorpho` object as input.
