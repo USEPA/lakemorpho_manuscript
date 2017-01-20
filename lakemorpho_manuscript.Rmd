@@ -129,8 +129,10 @@ lapply(example_lakeMorpho,class)
 ### Lake Morphometry Functions
 <!-- Think about discussing details of the implementation in more depth.  Also provide some indication as to what the metric means, ecologically -->
 Each of the remaining functions all expect a `lakeMorpho` object as input and all return a numeric value.  Some of the functions do have a side effect of adding a spatial object to the input `lakeMorpho` object.  
+####calcLakeMetrics  
+Calculate all Lake Morphometry Metrics
 
-#### lakeFetch	
+####lakeFetch	
 Fetch is the maximum open water distance in a given direction and can be used an indicator of mixing as greater fetch implies greater potential for waves[NEED REF]. The `lakeFetch()` function calculates fetch along an input bearing.  The input bearing may be any value from 0 to 360 where 0 and 360 both represent north, although the fetch for opposite directions (e.g. east and west) are identical.
 
 To calulcate the fetch of an input lake use:
@@ -144,8 +146,10 @@ lakeFetch(example_lakeMorpho, 360)
 lakeFetch(example_lakeMorpho, 270)
 ```
 
+####lakeMajorAxisLength
+Function to calculate major axis of the convex hull formed around the lake polygon
 
-#### lakeMaxDepth	
+####lakeMaxDepth	
 Maximum lake depth provides information that may be used to, along with flow rates, estimate the residence time of a lake.  While there is no substitute for field verifed measurements, maximum lake depth may be estimated with the surrounding topography. The `lakeMaxDepth()` function uses the methods outlined in Hollister *et al* [-@hollister2011predicting] to provide an estimate of the maximum lake depth.  It requires only a `lakeMorpho` object as input.  Optionally a correction factor based off of verified depth data may be specified is one is known.
 
 The usage for `lakeMaxDepth()` is:
@@ -155,74 +159,75 @@ The usage for `lakeMaxDepth()` is:
 lakeMaxDepth(example_lakeMorpho)
 ```
 
-#### lakeMaxLength
+####lakeMaxLength
 Maximum lake length is the longest open water distance within a lake and, similar to fetch, is a metric that can be used to estimate mixing potential [@lakewatch2001department].  The current implementation of this in `lakemorpho` places points at equal distances apart along the shoreline of the lake and then finds the longest point-to-point distance that also does not intersect land.  This value is returned as the maximum lake length.  An optional parameter, with a default value of `TRUE` allows the `SpatialLines` object to be stored on the input `lakeMorpho` object.
 
 To caluclate maximum lake length requires a `lakeMorpho` object and total number of points to use to find the maximum point-to-point distance.  
 
 ```{r lakeMaxLengthExample}
 #Max Length with a Point Density of 1000
-lakeMaxLength(example_lakeMorpho, 100, addLine = FALSE)
+lakeMaxLength(example_lakeMorpho, 1000, addLine = FALSE)
 ```
 
 The `pointDens` parameter can have an impact on both the processing time and the resulting value and both of these can vary as a function of the complexity of the shape of the lake with less complex lakes providing more consistent lake length across a range of number of points (Figure \ref{fig:pointdens}).  Given this caveat, care must be taken in choosing an appropriate number of points (and thus lines) to use to caluclate maximum lake length.  Several densities should be tested and the smallest number of points that produce a stable estimate should be used.
 
-#### lakeMaxWidth
+####lakeMaxWidth
 Maximum lake width is the maximum shore to shore distance that is perpendicular to the line representing maximum lake length and is another metric related to mixing [@lakewatch2001department].  The `lakeMaxWidth` function requires a `lakeMorpho` object and `pointDens` value which is used to determine the number of points along the maximum lake length line. The issue with `pointDens` that was discussed above also exists for the use of `pointDens` with `lakeMaxWidth()` and care should be taken to determine an appropriate number of lines to test.
 
 Usage of lakeMaxWidth is:
 
 ```{r lakeMaxWidthExample}
 #Max width with a point density of 1000
-lakeMaxWidth(example_lakeMorpho, 100)
+lakeMaxWidth(example_lakeMorpho, 1000)
 ```
 
-#### lakeMeanDepth	
+####lakeMeanDepth	
 Mean depth of a lake is calculated as the volume of the lake divided by the area [@lakewatch2001department].  This function requires only a `lakeMorpho` object and returns a numeric value of the mean depth.  Usage of the function is:
 
 ```{r lakeMeanDepthExample}
 lakeMeanDepth(example_lakeMorpho)
 ```
 
-#### lakeMeanWidth	
+####lakeMeanWidth	
 The mean width of a lake is defined as lake area divided by maximum lake length [@lakewatch2001department].  Input for this function is a `lakeMorpho` object that has the maximum lake length line added.  This requirement is checked and returns an error if the maximim length line is missing.
 
 ```{r lakeMeanWidthExample}
 # Throws an error if maximum lake length is missing
 lakeMeanWidth(example_lakeMorpho)
 # Add Maximum Lake Length
-lakeMaxLength(example_lakeMorpho,100,addLine = TRUE)
+lakeMaxLength(example_lakeMorpho,1000,addLine = TRUE)
 lakeMeanWidth(example_lakeMorpho)
 ```
 
-#### lakeMajorAxisLength
-Function to calculate major axis of the convex hull formed around the lake polygon
-
-#### lakeMinorAxisLength
+####lakeMinorAxisLength
 Function to calculate minor axis of the convex hull formed around the lake polygon
 
-#### lakeMinorMajorRatio
-function to caluculate major:minor
+####lakeMinorMajorRatio
+Function to calculate the ratio of the minor and major axis of the convex hull formed around the lake polygon
 
-#### lakeShorelineDevelopment	
+####lakeShorelineDevelopment	
 The shoreline development metric provides a measure of the complexity of the shoreline.  It is a ratio the perimeter of the lake to the perimeter of a circle of the same area.  Values will be 1 or greater with value of 1 indicating a circular lake.  This metric is used as an indicator of potential habitat [@lakewatch2001department].  It only requires a `lakeMorpho` object as input.
 
 ```{r lakeShorelineDevelopment}
 lakeShorelineDevelopment(example_lakeMorpho)
 ```
 
-#### lakeShorelineLength	
-Function to calculate shoreline length
+####lakeShorelineLength and lakeSurfaceArea
+Shoreline length is simply the total perimeter of the lake polygon and as with all other functions requires a `lakeMorpho` object as input.  To calculate the shoreline length:
 
-#### lakeSurfaceArea	
-Return lake surface area
+```{r lakeShorelineLength}
+lakeShorelineLength(example_lakeMorpho)
+```
 
-#### lakeVolume
-Caluclates Lake Volume in R
+Similarly, surface area for a lake is the total area of the lake polygon.  It is calculated via:
 
-#### calcLakeMetrics  
-Calculate all Lake Morphometry Metrics
- 
+```{r lakeSurfaceArea}
+lakeSurfaceArea(example_lakeMorpho)
+```
+
+####lakeVolume
+The `lakeVolume` function uses maximum lake depth (see lakeMaxDepth) and methods outlined by Hollister *et al.* [-@hollister2010volume] to estimate lake volume.  The method uses the ratio of the maximum depth to the maximum distance... 
+
 # Future plans
 sf pointDens
 
