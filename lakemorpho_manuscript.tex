@@ -194,15 +194,16 @@ This makes broad scale modelling of lake ecology a challenge as some of
 the key information about in-lake processes are unavailable. While this
 valuable \emph{in situ} information may be difficult to obtain, several
 national datasets exist that may be used to model and estimate lake
-morphometry. In particular digital elevation models and hydrography have
-been shown to be predicitive of several lake morphometry metrics. The R
-package \texttt{lakemorpho} has been developed to utilize this data and
-estimate the following morphometry metrics: surface area, shoreline
-length, shoreline development, maximum depth, mean depth, volume,
-maximum lake length, mean lake width, maximum lake width, and fetch. In
-this software note I describe the motivation behind developing
-\texttt{lakemorpho}, discuss the implementation in R, and describe the
-use of \texttt{lakemorpho} with an example of a typical use case.
+morphometry. In particular, digital elevation models and hydrography
+have been shown to be predicitive of several lake morphometry metrics.
+The R package \texttt{lakemorpho} has been developed to utilize this
+data and estimate the following morphometry metrics: surface area,
+shoreline length, major/minor axis length, shoreline development,
+maximum depth, mean depth, volume, maximum lake length, mean lake width,
+maximum lake width, and fetch. In this software note we describe the
+motivation behind developing \texttt{lakemorpho}, discuss the
+implementation in R, and describe the use of \texttt{lakemorpho} with an
+example of a typical use case.
 
 \vspace{3mm}
 
@@ -227,22 +228,22 @@ limnologists have long recognized the importance of lake morphology as
 one factor controlling a variety of ecological processes in lakes.
 
 Traditional methods for calculating lake morphometry metrics have relied
-upon the use of paper bathymetry maps, planimeters, or unnecessary
-assumptions {[}5--8{]}. In addition, detailed bathymetry is a
-requirement for most of these methods, but it is not universally
-available and often only available for a relatively small number of
-lakes. This is not a problem when the focus of a study is a single lake,
-a small number of lakes or on well studied lakes. Relying on complete
+upon the use of paper bathymetry maps, planimeters, or simple heuristics
+based on their values relative to other metrics that may not hold in all
+settings {[}5--8{]}. In addition, detailed bathymetry is a requirement
+for the calculation of most lake morphometry metrics, but is generally
+only available for a relatively small number of lakes. Although this is
+not a problem when the focus of a study is a single lake, a small number
+of lakes, or a group of well-studied lakes, reliance on complete
 bathymetry becomes a limitation when attempting to conduct regional or
-national studies of lakes as bathymetry is at best difficult to find or
-does not exist for all lakes of interest. In these cases alternative
-approaches for estimating lake morphometry are required.
+national-scale lake studies. In these cases, alternative approaches for
+estimating lake morphometry are required.
 
 Recent work has demonstrated the ability to estimate many of these
 metrics from ubiquitous spatial data. For instance, maximum depth and
 lake volume may be predicted using the lake polygon and surrounding
-topography {[}8,9{]} provided by the National Hydrography Dataset Plus
-and the National Elevation Dataset, respectively {[}10,11{]}. The
+topography {[}8--11{]} provided by the National Hydrography Dataset Plus
+and the National Elevation Dataset, respectively {[}12,13{]}. The
 initial development of these tools were developed with proprietary tools
 thus limiting their use. In an effort to reach a broader audience the
 tools were converted to R, expanded to include a more complete suite of
@@ -256,10 +257,10 @@ visualization. It is becuase of these packages that \texttt{lakemorpho}
 was implemented as an R package. In particular, \texttt{lakemorpho}
 relies on the following packages: \texttt{maptools}, \texttt{rgdal},
 \texttt{raster}, \texttt{rgeos}, \texttt{sp},
-\texttt{geosphere}{[}12--18{]}. In addition to these packages two
+\texttt{geosphere}{[}14--20{]}. In addition to these packages two
 external libraries, the Geospatial Data Abstraction Library (GDAL) and
-Geometry Engine, Open Source(GEOS), are needed. Their availability to R
-and installation varies by operating system {[}19,20{]}.
+Geometry Engine, Open Source (GEOS), are needed. Their availability to R
+and installation varies by operating system {[}21,22{]}.
 
 \subsection{\texorpdfstring{Using
 \texttt{lakemorpho}}{Using lakemorpho}}\label{using-lakemorpho}
@@ -318,12 +319,12 @@ The \texttt{lakeSurroundTopo} function is the primary mechanism for
 creating a \texttt{lakeMorpho} object. There are two required inputs and
 one optional input for \texttt{lakeSurroundTopo}. The first required
 input is a \texttt{SpatialPolygons} or \texttt{SpatialPolygonsDataFrame}
-of the lake {[}16{]}. Only a single lake is accepted as input, although
+of the lake {[}18{]}. Only a single lake is accepted as input, although
 this lake may be composed of multiple polygons (i.e.~a lake with
 islands). If metrics for multiple lakes are required they will need to
 be passed to the suite of \texttt{lakemorpho} functions separately. The
 second required input is a \texttt{RasterLayer} of the elevation
-surrounding the lake {[}17{]}. The default raster size is taken from the
+surrounding the lake {[}19{]}. The default raster size is taken from the
 resolution of the input elevation data but may be specified separately.
 The third input specifies the area representing the surrounding
 topography. By default this is a buffer of the lake shoreline with the
@@ -406,7 +407,49 @@ object.
 
 \paragraph{calcLakeMetrics}\label{calclakemetrics}
 
-Calculate all Lake Morphometry Metrics
+The \texttt{calcLakeMetrics()} function is a convenience function that
+will calculate all of the \texttt{lakemorpho} metrics for a single
+\texttt{lakeMorpho} object. It requires an input \texttt{lakeMorpho} as
+well as a \texttt{bearing} (for \texttt{lakeFetch}) and
+\texttt{pointDens} for maximum lake length and width.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{calcLakeMetrics}\NormalTok{(example_lakeMorpho, }\DecValTok{0}\NormalTok{, }\DecValTok{250}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $surfaceArea
+## [1] 16453180
+## 
+## $shorelineLength
+## [1] 45991.38
+## 
+## $shorelineDevelopment
+## [1] 3.198502
+## 
+## $maxDepth
+## [1] 99.17621
+## 
+## $volume
+## [1] 4802535
+## 
+## $meanDepth
+## [1] 28.94864
+## 
+## $maxLength
+## [1] 9176.819
+## 
+## $maxWidth
+## [1] 3173.489
+## 
+## $meanWidth
+## [1] 1792.907
+## 
+## $fetch
+## [1] 6336.798
+\end{verbatim}
 
 \paragraph{lakeFetch}\label{lakefetch}
 
@@ -494,7 +537,7 @@ The usage for \texttt{lakeMaxDepth()} is:
 
 Maximum lake length is the longest open water distance within a lake
 and, similar to fetch, is a metric that can be used to estimate mixing
-potential {[}21{]}. The current implementation of this in
+potential {[}23{]}. The current implementation of this in
 \texttt{lakemorpho} places points at equal distances apart along the
 shoreline of the lake and then finds the longest point-to-point distance
 that also does not intersect land. This value is returned as the maximum
@@ -514,7 +557,7 @@ distance.
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 9470.766
+## [1] 9409.7
 \end{verbatim}
 
 The \texttt{pointDens} parameter can have an impact on both the
@@ -531,7 +574,7 @@ be used.
 
 Maximum lake width is the maximum shore to shore distance that is
 perpendicular to the line representing maximum lake length and is
-another metric related to mixing {[}21{]}. The \texttt{lakeMaxWidth}
+another metric related to mixing {[}23{]}. The \texttt{lakeMaxWidth}
 function requires a \texttt{lakeMorpho} object and \texttt{pointDens}
 value which is used to determine the number of points along the maximum
 lake length line. The issue with \texttt{pointDens} that was discussed
@@ -549,13 +592,13 @@ Usage of lakeMaxWidth is:
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 3194.434
+## [1] 3208.011
 \end{verbatim}
 
 \paragraph{lakeMeanDepth}\label{lakemeandepth}
 
 Mean depth of a lake is calculated as the volume of the lake divided by
-the area {[}21{]}. This function requires only a \texttt{lakeMorpho}
+the area {[}23{]}. This function requires only a \texttt{lakeMorpho}
 object and returns a numeric value of the mean depth. Usage of the
 function is:
 
@@ -572,7 +615,7 @@ function is:
 \paragraph{lakeMeanWidth}\label{lakemeanwidth}
 
 The mean width of a lake is defined as lake area divided by maximum lake
-length {[}21{]}. Input for this function is a \texttt{lakeMorpho} object
+length {[}23{]}. Input for this function is a \texttt{lakeMorpho} object
 that has the maximum lake length line added. This requirement is checked
 and returns an error if the maximim length line is missing.
 
@@ -584,7 +627,7 @@ and returns an error if the maximim length line is missing.
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 1797.037
+## [1] 1854.39
 \end{verbatim}
 
 \begin{Shaded}
@@ -595,7 +638,7 @@ and returns an error if the maximim length line is missing.
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 9025.588
+## [1] 5824.158
 \end{verbatim}
 
 \begin{Shaded}
@@ -605,7 +648,7 @@ and returns an error if the maximim length line is missing.
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 1822.948
+## [1] 2824.989
 \end{verbatim}
 
 \paragraph{lakeMinorAxisLength}\label{lakeminoraxislength}
@@ -650,7 +693,7 @@ The shoreline development metric provides a measure of the complexity of
 the shoreline. It is a ratio the perimeter of the lake to the perimeter
 of a circle of the same area. Values will be 1 or greater with value of
 1 indicating a circular lake. This metric is used as an indicator of
-potential habitat {[}21{]}. It only requires a \texttt{lakeMorpho}
+potential habitat {[}23{]}. It only requires a \texttt{lakeMorpho}
 object as input.
 
 \begin{Shaded}
@@ -699,10 +742,6 @@ The \texttt{lakeVolume} function uses maximum lake depth (see
 lakeMaxDepth) and methods outlined by Hollister \emph{et al.} {[}8{]} to
 estimate lake volume. The method uses the ratio of the maximum depth to
 the maximum distance\ldots{}
-
-\section{Future plans}\label{future-plans}
-
-sf pointDens
 
 \section{Software Availability}\label{software-availability}
 
@@ -777,7 +816,7 @@ Jersey. 592 p.
 Verlag, New York.
 
 \hypertarget{ref-hollister2010volume}{}
-8. Hollister J, Milstead WB (2010) Using gis to estimate lake volume
+8. Hollister J, Milstead WB (2010) Using GIS to estimate lake volume
 from limited data. Lake and Reservoir Management 26: 194--199.
 
 \hypertarget{ref-hollister2011predicting}{}
@@ -786,55 +825,65 @@ depth from surrounding topography. PLoS ONE 6: e25764. Available:
 \url{http://dx.doi.org/10.1371/journal.pone.0025764}. Accessed 28 Jun
 2013.
 
+\hypertarget{ref-messager2016estimating}{}
+10. Messager ML, Lehner B, Grill G, Nedeva I, Schmitt O (2016)
+Estimating the volume and age of water stored in global lakes using a
+geo-statistical approach. Nature Communications 7.
+
+\hypertarget{ref-oliver2016prediction}{}
+11. Oliver SK, Soranno PA, Fergus CE, Wagner T, Winslow LA, et al.
+(2016) Prediction of lake depth across a 17-state region in the united
+states. Inland Waters 6: 314--324.
+
 \hypertarget{ref-usepa2005national}{}
-10. USEPA U (2005) National hydrography dataset plus--NHDPlus.
+12. USEPA U (2005) National hydrography dataset plus--NHDPlus.
 
 \hypertarget{ref-gesch2009national}{}
-11. Gesch D, Evans G, Mauck J, Hutchinson J, Carswell Jr W (2009) The
+13. Gesch D, Evans G, Mauck J, Hutchinson J, Carswell Jr W (2009) The
 national map-elevation: US geological survey fact sheet 2009-3053, 4 p.
 
 \hypertarget{ref-bivand2014maptools}{}
-12. Bivand R, Lewin-Koh N (2014) Maptools: Tools for reading and
+14. Bivand R, Lewin-Koh N (2014) Maptools: Tools for reading and
 handling spatial objects. Available:
 \url{http://CRAN.R-project.org/package=maptools}.
 
 \hypertarget{ref-bivand2014rgdal}{}
-13. Bivand R, Keitt T, Rowlingson B (2014) Rgdal: Bindings for the
+15. Bivand R, Keitt T, Rowlingson B (2014) Rgdal: Bindings for the
 geospatial data abstraction library. Available:
 \url{http://CRAN.R-project.org/package=rgdal}.
 
 \hypertarget{ref-bivand2014rgeos}{}
-14. Bivand R, Rundel C (2014) Rgeos: Interface to geometry engine - open
+16. Bivand R, Rundel C (2014) Rgeos: Interface to geometry engine - open
 source (geos). Available: \url{http://CRAN.R-project.org/package=rgeos}.
 
 \hypertarget{ref-bivand2008applied}{}
-15. Bivand RS, Pebesma EJ, Gómez-Rubio V (2008) Applied spatial data
+17. Bivand RS, Pebesma EJ, Gómez-Rubio V (2008) Applied spatial data
 analysis with r. Springer.
 
 \hypertarget{ref-pebesma2005sp}{}
-16. Pebesma EJ, Bivand RS (2005) Classes and methods for spatial data in
+18. Pebesma EJ, Bivand RS (2005) Classes and methods for spatial data in
 r. R news 5: 9--13.
 
 \hypertarget{ref-hijmans2014raster}{}
-17. Hijmans RJ (2014) Raster: Raster: Geographic data analysis and
+19. Hijmans RJ (2014) Raster: Raster: Geographic data analysis and
 modeling. Available: \url{http://CRAN.R-project.org/package=raster}.
 
 \hypertarget{ref-hijmans2014geosphere}{}
-18. Hijmans RJ (2014) Geosphere: Spherical trigonometry. Available:
+20. Hijmans RJ (2014) Geosphere: Spherical trigonometry. Available:
 \url{http://CRAN.R-project.org/package=geosphere}.
 
 \hypertarget{ref-GDAL2012}{}
-19. GDAL Development Team (2012) GDAL - geospatial data abstraction
+21. GDAL Development Team (2012) GDAL - geospatial data abstraction
 library, version 1.9.2. Open Source Geospatial Foundation. Available:
 \href{\%20http://www.gdal.org}{http://www.gdal.org}.
 
 \hypertarget{ref-GEOS2013}{}
-20. Foundation OSG (2013) GEOS - geometry engine - open source. Open
+22. Foundation OSG (2013) GEOS - geometry engine - open source. Open
 Source Geospatial Foundation. Available:
 \url{http://trac.osgeo.org/geos/}.
 
 \hypertarget{ref-lakewatch2001department}{}
-21. LAKEWATCH F (2001) Department of fisheries and aquatic sciences, a
+23. LAKEWATCH F (2001) Department of fisheries and aquatic sciences, a
 beginner's guide to water management-lake morphometry.
 
 \end{document}

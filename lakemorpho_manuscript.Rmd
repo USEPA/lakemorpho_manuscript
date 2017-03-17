@@ -41,7 +41,7 @@ library("sp")
 library("rgeos")
 library("knitr")
 
-opts_chunk$set(dev = 'pdf', fig.width=6, fig.height=5)
+opts_chunk$set(dev = 'pdf', fig.width=6, fig.height=5, cache=TRUE)
 
 # Table Captions from @DeanK on http://stackoverflow.com/questions/15258233/using-table-caption-on-r-markdown-file-using-knitr-to-use-in-pandoc-to-convert-t
 #Figure captions are handled by LaTeX
@@ -87,11 +87,11 @@ The study and quantificaiton of lake shape (i.e. lake morphology and morphometry
 
 Traditional methods for calculating lake morphometry metrics have relied upon the use of paper bathymetry maps, planimeters, or simple heuristics based on their values relative to other metrics that may not hold in all settings [@kalff2002limnology; @welch1935limnology; @wetzel2000limnological; @hollister2010volume]. In addition, detailed bathymetry is a requirement for the calculation of most lake morphometry metrics, but is generally only available for a relatively small number of lakes. Although this is not a problem when the focus of a study is a single lake, a small number of lakes, or a group of well-studied lakes, reliance on complete bathymetry becomes a limitation when attempting to conduct regional or national-scale lake studies. In these cases, alternative approaches for estimating lake morphometry are required.  
 
-Recent work has demonstrated the ability to estimate many of these metrics from ubiquitous spatial data.  For instance, maximum depth and lake volume may be predicted using the lake polygon and surrounding topography [@hollister2010volume; @hollister2011predicting;@messager2016estimating] <!--Need to add recent additional papers on lake depth--> provided by the National Hydrography Dataset Plus and the National Elevation Dataset, respectively [e.g. @usepa2005national;@gesch2009national]. The initial development of these tools were developed with proprietary tools thus limiting their use.  In an effort to reach a broader audience the tools were converted to R, expanded to include a more complete suite of lake morphometry metrics and compiled into an R Package.
+Recent work has demonstrated the ability to estimate many of these metrics from ubiquitous spatial data.  For instance, maximum depth and lake volume may be predicted using the lake polygon and surrounding topography [@hollister2010volume; @hollister2011predicting;@messager2016estimating;@oliver2016prediction] <!--Need to add recent additional papers on lake depth--> provided by the National Hydrography Dataset Plus and the National Elevation Dataset, respectively [e.g. @usepa2005national;@gesch2009national]. The initial development of these tools were developed with proprietary tools thus limiting their use.  In an effort to reach a broader audience the tools were converted to R, expanded to include a more complete suite of lake morphometry metrics and compiled into an R Package.
 
 # Implementation and Use in R
 
-Using R as a Geographic Information System is now possible as several packages provide spatial data handling, geospatial analysis, and visualization.  It is becuase of these packages that `lakemorpho` was  implemented as an R package.  In particular, `lakemorpho` relies on the following packages: `maptools`, `rgdal`, `raster`, `rgeos`, `sp`, `geosphere`[@bivand2014maptools;@bivand2014rgdal;@bivand2014rgeos;@bivand2008applied;@pebesma2005sp;@hijmans2014raster;@hijmans2014geosphere].  In addition to these packages two external libraries, the Geospatial Data Abstraction Library (GDAL) and Geometry Engine, Open Source(GEOS), are needed.  Their availability to R and installation varies by operating system [@GDAL2012;@GEOS2013].  
+Using R as a Geographic Information System is now possible as several packages provide spatial data handling, geospatial analysis, and visualization.  It is becuase of these packages that `lakemorpho` was  implemented as an R package.  In particular, `lakemorpho` relies on the following packages: `maptools`, `rgdal`, `raster`, `rgeos`, `sp`, `geosphere`[@bivand2014maptools;@bivand2014rgdal;@bivand2014rgeos;@bivand2008applied;@pebesma2005sp;@hijmans2014raster;@hijmans2014geosphere].  In addition to these packages two external libraries, the Geospatial Data Abstraction Library (GDAL) and Geometry Engine, Open Source (GEOS), are needed.  Their availability to R and installation varies by operating system [@GDAL2012;@GEOS2013].  
 
 ## Using `lakemorpho`
 
@@ -135,7 +135,11 @@ lapply(example_lakeMorpho,class)
 Each of the remaining functions all expect a `lakeMorpho` object as input and all return a numeric value.  Some of the functions do have a side effect of adding a spatial object to the input `lakeMorpho` object. 
 
 #### calcLakeMetrics  
-Calculate all Lake Morphometry Metrics
+The `calcLakeMetrics()` function is a convenience function that will calculate all of the `lakemorpho` metrics for a single `lakeMorpho` object.  It requires an input `lakeMorpho` as well as a `bearing` (for `lakeFetch`) and `pointDens` for maximum lake length and width.
+
+```{r calcLakeMetrics_example}
+calcLakeMetrics(example_lakeMorpho, 0, 250)
+```
 
 #### lakeFetch	
 Fetch is the maximum open water distance in a given direction and can be used an indicator of mixing as greater fetch implies greater potential for waves[NEED REF]. The `lakeFetch()` function calculates fetch along an input bearing.  The input bearing may be any value from 0 to 360 where 0 and 360 both represent north, although the fetch for opposite directions (e.g. east and west) are identical.
@@ -162,7 +166,6 @@ lakeMajorAxisLength(example_lakeMorpho, addLine = TRUE)
 Maximum lake depth provides information that may be used to, along with flow rates, estimate the residence time of a lake.  While there is no substitute for field verifed measurements, maximum lake depth may be estimated with the surrounding topography. The `lakeMaxDepth()` function uses the methods outlined in Hollister *et al* [-@hollister2011predicting] to provide an estimate of the maximum lake depth.  It requires only a `lakeMorpho` object as input.  Optionally a correction factor based off of verified depth data may be specified is one is known.
 
 The usage for `lakeMaxDepth()` is:
-
 ```{r lakeMaxDepthExample}
 #Maximum Lake Depth
 lakeMaxDepth(example_lakeMorpho)
@@ -249,9 +252,6 @@ lakeSurfaceArea(example_lakeMorpho)
 
 #### lakeVolume
 The `lakeVolume` function uses maximum lake depth (see lakeMaxDepth) and methods outlined by Hollister *et al.* [-@hollister2010volume] to estimate lake volume.  The method uses the ratio of the maximum depth to the maximum distance... 
-
-# Future plans
-sf pointDens
 
 # Software Availability
 
