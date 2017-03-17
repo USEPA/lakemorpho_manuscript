@@ -134,6 +134,7 @@
 \title{lakemorpho: Calculating lake morphometry metrics in R}
 \author{
 Jeffrey W. Hollister
+Joseph Stachelek
 }
 \date{}
 
@@ -148,6 +149,7 @@ Jeffrey W. Hollister
 \begin{center}
 \large
 Jeffrey W. Hollister \textsuperscript{1} 
+Joseph Stachelek \textsuperscript{2} 
 \end{center}
 %%Adds affiliations from YAML
 \begin{justify}
@@ -156,6 +158,10 @@ Jeffrey W. Hollister \textsuperscript{1}
 \textsuperscript{1}US Environmental Protection Agency, Office of Research and Development,
 National Health and Environmental Effects Research Laboratory, Atlantic
 Ecology Division, 27 Tarzwell Drive Narragansett, RI, 02882, USA\\*
+\\*
+\textsuperscript{2}Michigan State University, Department of Fisheries and Wildlife, Natural
+Resources Building, 480 Wilson Road, Room 13, East Lansing, MI, 48824,
+USA\\*
 }
 %%Adds corresponding author email(s) from YAML
 \newcounter{num}
@@ -246,8 +252,8 @@ lake morphometry metrics and compiled into an R Package.
 
 Using R as a Geographic Information System is now possible as several
 packages provide spatial data handling, geospatial analysis, and
-visualization. It is becuase of these pacakges that \texttt{lakemorpho}
-was implemented as an R package. In particular,\texttt{lakemorpho}
+visualization. It is becuase of these packages that \texttt{lakemorpho}
+was implemented as an R package. In particular, \texttt{lakemorpho}
 relies on the following packages: \texttt{maptools}, \texttt{rgdal},
 \texttt{raster}, \texttt{rgeos}, \texttt{sp},
 \texttt{geosphere}{[}12--18{]}. In addition to these packages two
@@ -268,7 +274,7 @@ metrics would include pulling spatial data into R (e.g.~as shapefiles,
 tiff, etc.), creating a \texttt{lakeMorpho} object and calculating the
 desired lake morphometry metrics. The following sections provide details
 on the type of input data required and dicsuss the use of the functions,
-inlcluding examples with the provided example data.
+including examples with the provided example data.
 
 \subsubsection{\texorpdfstring{The \texttt{lakeMorpho} Class and
 \texttt{lakeSurroundTopo}}{The lakeMorpho Class and lakeSurroundTopo}}\label{the-lakemorpho-class-and-lakesurroundtopo}
@@ -277,20 +283,20 @@ Many of the lake morphometry metrics rely on the same information about
 the lake. For instance, the functions to estimate maximum depth, mean
 depth, and volume rely on statistical summaries of the surrouding
 topography as well as the maximum in-lake distance to shoreline.
-{[}8,9{]}. To avoid recaluclating these values, a \texttt{lakeMorpho}
+{[}8,9{]}. To avoid recalculating these values, a \texttt{lakeMorpho}
 class was created to store the information on surrounding topography as
 well as the original datasets. This object is required input for all of
 the lake morphometry functions in the the \texttt{lakemorpho} package.
 In addition to this, an object of class \texttt{lakeMorpho} also holds
 the initial datasets and, optionally, can store the spatial objects that
 result from some of the lake morphometry functions. At a minimum, a
-\texttt{lakeMorpho} object contains.
+\texttt{lakeMorpho} object contains:
 
 \begin{itemize}
 \tightlist
 \item
   ``lake'' - A \texttt{SpatialPolygons} or
-  \texttt{SpatialPolygonsDataFrame} object of the originally input lake
+  \texttt{SpatialPolygonsDataFrame} object of the original input lake
   data.
 \item
   ``elev'' - A \texttt{RasterLayer} representing the elevation in a
@@ -398,6 +404,10 @@ as input and all return a numeric value. Some of the functions do have a
 side effect of adding a spatial object to the input \texttt{lakeMorpho}
 object.
 
+\paragraph{calcLakeMetrics}\label{calclakemetrics}
+
+Calculate all Lake Morphometry Metrics
+
 \paragraph{lakeFetch}\label{lakefetch}
 
 Fetch is the maximum open water distance in a given direction and can be
@@ -439,6 +449,21 @@ To calulcate the fetch of an input lake use:
 
 \begin{verbatim}
 ## [1] 3129.997
+\end{verbatim}
+
+\paragraph{lakeMajorAxisLength}\label{lakemajoraxislength}
+
+The major axis of a lake is defined as the longest line intersecting the
+convex hull formed around its polygon while passing through its center.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{lakeMajorAxisLength}\NormalTok{(example_lakeMorpho, }\DataTypeTok{addLine =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 13159.64
 \end{verbatim}
 
 \paragraph{lakeMaxDepth}\label{lakemaxdepth}
@@ -483,13 +508,13 @@ distance.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Max Length with a Point Density of 1000}
-\KeywordTok{lakeMaxLength}\NormalTok{(example_lakeMorpho, }\DecValTok{100}\NormalTok{, }\DataTypeTok{addLine =} \OtherTok{FALSE}\NormalTok{)}
+\CommentTok{#Max Length with a Point Density of 250}
+\KeywordTok{lakeMaxLength}\NormalTok{(example_lakeMorpho, }\DecValTok{250}\NormalTok{, }\DataTypeTok{addLine =} \OtherTok{FALSE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 5987.803
+## [1] 9470.766
 \end{verbatim}
 
 The \texttt{pointDens} parameter can have an impact on both the
@@ -498,7 +523,7 @@ function of the complexity of the shape of the lake with less complex
 lakes providing more consistent lake length across a range of number of
 points (Figure \ref{fig:pointdens}). Given this caveat, care must be
 taken in choosing an appropriate number of points (and thus lines) to
-use to caluclate maximum lake length. Several densities should be tested
+use to calculate maximum lake length. Several densities should be tested
 and the smallest number of points that produce a stable estimate should
 be used.
 
@@ -518,13 +543,13 @@ Usage of lakeMaxWidth is:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Max width with a point density of 1000}
-\KeywordTok{lakeMaxWidth}\NormalTok{(example_lakeMorpho, }\DecValTok{100}\NormalTok{)}
+\CommentTok{#Max width with a point density of 250}
+\KeywordTok{lakeMaxWidth}\NormalTok{(example_lakeMorpho, }\DecValTok{250}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 3122.981
+## [1] 3194.434
 \end{verbatim}
 
 \paragraph{lakeMeanDepth}\label{lakemeandepth}
@@ -559,18 +584,18 @@ and returns an error if the maximim length line is missing.
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 2685.495
+## [1] 1797.037
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Add Maximum Lake Length}
-\KeywordTok{lakeMaxLength}\NormalTok{(example_lakeMorpho,}\DecValTok{100}\NormalTok{,}\DataTypeTok{addLine =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{lakeMaxLength}\NormalTok{(example_lakeMorpho, }\DecValTok{100}\NormalTok{, }\DataTypeTok{addLine =} \OtherTok{TRUE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 9266.293
+## [1] 9025.588
 \end{verbatim}
 
 \begin{Shaded}
@@ -580,22 +605,44 @@ and returns an error if the maximim length line is missing.
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 1775.595
+## [1] 1822.948
 \end{verbatim}
-
-\paragraph{lakeMajorAxisLength}\label{lakemajoraxislength}
-
-Function to calculate major axis of the convex hull formed around the
-lake polygon
 
 \paragraph{lakeMinorAxisLength}\label{lakeminoraxislength}
 
-Function to calculate minor axis of the convex hull formed around the
-lake polygon
+The minor axis of a lake is defined as the shortest line intersecting
+the convex hull formed around the lake polygon while passing through its
+center.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{lakeMinorAxisLength}\NormalTok{(example_lakeMorpho, }\DataTypeTok{addLine =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 6926.263
+\end{verbatim}
 
 \paragraph{lakeMinorMajorRatio}\label{lakeminormajorratio}
 
-function to caluculate major:minor
+The ratio of the lake major axis length to the minor axis length is also
+known as the aspect ratio. Circular lakes have aspect ratios approaching
+1 while thin-elongated lakes have aspect ratios approaching 0. If major
+and minor axis length have not already been added to the
+\texttt{lakeMoropho} object these are calculated. The \texttt{addLine}
+argument adds the lines for the lake's minor and major axes to the
+\texttt{lakeMorpho} object.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{lakeMinorMajorRatio}\NormalTok{(example_lakeMorpho, }\DataTypeTok{addLine =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.5263261
+\end{verbatim}
 
 \paragraph{lakeShorelineDevelopment}\label{lakeshorelinedevelopment}
 
@@ -616,21 +663,42 @@ object as input.
 ## [1] 3.198502
 \end{verbatim}
 
-\paragraph{lakeShorelineLength}\label{lakeshorelinelength}
+\paragraph{lakeShorelineLength and
+lakeSurfaceArea}\label{lakeshorelinelength-and-lakesurfacearea}
 
-Function to calculate shoreline length
+Shoreline length is simply the total perimeter of the lake polygon and
+as with all other functions requires a \texttt{lakeMorpho} object as
+input. To calculate the shoreline length:
 
-\paragraph{lakeSurfaceArea}\label{lakesurfacearea}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{lakeShorelineLength}\NormalTok{(example_lakeMorpho)}
+\end{Highlighting}
+\end{Shaded}
 
-Return lake surface area
+\begin{verbatim}
+## [1] 45991.38
+\end{verbatim}
+
+Similarly, surface area for a lake is the total area of the lake
+polygon. It is calculated via:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{lakeSurfaceArea}\NormalTok{(example_lakeMorpho)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 16453180
+\end{verbatim}
 
 \paragraph{lakeVolume}\label{lakevolume}
 
-Caluclates Lake Volume in R
-
-\paragraph{calcLakeMetrics}\label{calclakemetrics}
-
-Calculate all Lake Morphometry Metrics
+The \texttt{lakeVolume} function uses maximum lake depth (see
+lakeMaxDepth) and methods outlined by Hollister \emph{et al.} {[}8{]} to
+estimate lake volume. The method uses the ratio of the maximum depth to
+the maximum distance\ldots{}
 
 \section{Future plans}\label{future-plans}
 
