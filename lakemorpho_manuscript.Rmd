@@ -1,36 +1,18 @@
 ---
 title: 'lakemorpho: Calculating lake morphometry metrics in R'
-author:  
-- name: Jeffrey W. Hollister
-  affilnum: '1'
-- name: Joseph Stachelek
-  affilnum: '2'
-affiliation:
-- affilnum: 1
-  affil: US Environmental Protection Agency, Office of Research and Development, National Health and Environmental Effects Research Laboratory, Atlantic Ecology Division, 27 Tarzwell Drive  Narragansett, RI, 02882, USA
-- affilnum: 2
-  affil: Michigan State University, Department of Fisheries and Wildlife, Natural Resources Building, 480 Wilson Road, Room 13, East Lansing, MI, 48824, USA
-output:
-  pdf_document:
-    fig_caption: yes
-    keep_tex: yes
-    number_sections: no
-    template: components/manuscript.latex
-  html_document: null
-  word_document: null
-fontsize: 11pt
-capsize: normalsize
+output: 
+  word_document:
+    reference_docx: components/manuscript_template.docx   
+author: 
+- "Jeffrey W. Hollister ^\\*^ ^*1*^, Joseph Stachelek ^*2*^"
+- "^*1*^ US Environmental Protection Agency, Office of Research and Development, National Health and Environmental Effects Research Laboratory, Atlantic Ecology Division, 27 Tarzwell Drive  Narragansett, RI, 02882, USA"
+- "^*2*^ Michigan State University, Department of Fisheries and Wildlife, Natural Resources Building, 480 Wilson Road, Room 13, East Lansing, MI, 48824, USA"
+- "^\\*^  *corresponding author: hollister.jeff@epa.gov*"
 csl: components/plos.csl
-documentclass: article
-spacing: doublespacing
-linenumbers: yes
 bibliography: components/manuscript.bib
-abstract: no
+abstract: "Metrics describing the shape and size of lakes, known as lake morphometry metrics, are important for any limnological study.  In cases where a lake has long been the subject of study these data are often already collected and the data is openly available.  Many other lakes have this data collected, but access to the data is challenging as it is often stored on individual computers (or worse in filing cabinets) and is available only to the primary investigators.  The vast majority of lakes fall into a third category in which the data is not available.  This makes broad scale modelling of lake ecology a challenge as some of the key information about in-lake processes are unavailable.  While this valuable *in situ* information may be difficult to obtain, several national datasets exist that may be used to model and estimate lake morphometry.  In particular, digital elevation models and hydrography have been shown to be predicitive of several lake morphometry metrics.  The R package `lakemorpho` has been developed to utilize this data and estimate the following morphometry metrics: surface area, shoreline length, major/minor axis length, shoreline development, maximum depth, mean depth, volume, maximum lake length, mean lake width, maximum lake width, and fetch. In this software note we describe the motivation behind developing `lakemorpho`, discuss the implementation in R, and describe the use of `lakemorpho` with an example of a typical use case."  
 ---
-<!--
-%\VignetteEngine{knitr::rmarkdown}
-%\VignetteIndexEntry{lakemorpho: Calculating lake morphometry metrics in R}
--->
+*keywords:* limnology, R, lake morphometry, lake depth, lake volume, 
 
 ```{r setup, include=FALSE, echo=FALSE}
 #Put whatever you normally put in a setup chunk.
@@ -65,17 +47,6 @@ knit_hooks$set(output = function(x, options) {
 #Place tables and figures and numerical results where they need to go.
 ```
 
-<!-- Abstract is being wrapped in latex here so that all analysis can be run in the chunk above and the results reproducibly referenced in the abstract. -->
-
-\singlespace
-
-\vspace{2mm}\hrule
-
-Metrics describing the shape and size of lakes, known as lake morphometry metrics, are important for any limnological study.  In cases where a lake has long been the subject of study these data are often already collected and the data is openly available.  Many other lakes have this data collected, but access to the data is challenging as it is often stored on individual computers (or worse in filing cabinets) and is available only to the primary investigators.  The vast majority of lakes fall into a third category in which the data is not available.  This makes broad scale modelling of lake ecology a challenge as some of the key information about in-lake processes are unavailable.  While this valuable *in situ* information may be difficult to obtain, several national datasets exist that may be used to model and estimate lake morphometry.  In particular, digital elevation models and hydrography have been shown to be predicitive of several lake morphometry metrics.  The R package `lakemorpho` has been developed to utilize this data and estimate the following morphometry metrics: surface area, shoreline length, major/minor axis length, shoreline development, maximum depth, mean depth, volume, maximum lake length, mean lake width, maximum lake width, and fetch. In this software note we describe the motivation behind developing `lakemorpho`, discuss the implementation in R, and describe the use of `lakemorpho` with an example of a typical use case.    
-
-\vspace{3mm}\hrule
-\doublespace
-
 <!-- 
 Notes on stuff to add
 new zmax argument
@@ -89,13 +60,15 @@ Traditional methods for calculating lake morphometry metrics have relied upon th
 
 Recent work has demonstrated the ability to estimate many of these metrics from ubiquitous spatial data.  For instance, maximum depth and lake volume may be predicted using the lake polygon and surrounding topography [@hollister2010volume; @hollister2011predicting;@messager2016estimating;@oliver2016prediction] <!--Need to add recent additional papers on lake depth--> provided by the National Hydrography Dataset Plus and the National Elevation Dataset, respectively [e.g. @usepa2005national;@gesch2009national]. The initial development of these tools were developed with proprietary tools thus limiting their use.  In an effort to reach a broader audience the tools were converted to R, expanded to include a more complete suite of lake morphometry metrics and compiled into an R Package.
 
-# Implementation and Use in R
+# Methods
+
+## Implementation in R
 
 Using R as a Geographic Information System is now possible as several packages provide spatial data handling, geospatial analysis, and visualization.  It is becuase of these packages that `lakemorpho` was  implemented as an R package.  In particular, `lakemorpho` relies on the following packages: `maptools`, `rgdal`, `raster`, `rgeos`, `sp`, `geosphere`[@bivand2014maptools;@bivand2014rgdal;@bivand2014rgeos;@bivand2008applied;@pebesma2005sp;@hijmans2014raster;@hijmans2014geosphere].  In addition to these packages two external libraries, the Geospatial Data Abstraction Library (GDAL) and Geometry Engine, Open Source (GEOS), are needed.  Their availability to R and installation varies by operating system [@GDAL2012;@GEOS2013].  
 
 ## Using `lakemorpho`
 
-Included in `lakemorpho` are, one function to create a `lakeMorpho` object,  eleven functions to caclulate morphometry metrics, a default plotting function, two example datasets, and an example `lakeMorpho` object.
+Included in `lakemorpho` are, one function to create a `lakeMorpho` object,  several functions to caclulate morphometry metrics, a default plotting function, two example datasets, and an example `lakeMorpho` object.
 
 A typical workflow for using `lakemorpho` to calculate lake metrics would include
 pulling spatial data into R (e.g. as shapefiles, tiff, etc.), creating a `lakeMorpho` object  and calculating the desired lake morphometry metrics.  The following sections provide details on the type of input data required and dicsuss the use of the functions, including examples with the provided example data.
@@ -134,14 +107,16 @@ lapply(example_lakeMorpho,class)
 <!-- Think about discussing details of the implementation in more depth.  Also provide some indication as to what the metric means, ecologically -->
 Each of the remaining functions all expect a `lakeMorpho` object as input and all return a numeric value.  Some of the functions do have a side effect of adding a spatial object to the input `lakeMorpho` object. 
 
-#### calcLakeMetrics  
+**calcLakeMetrics** 
+
 The `calcLakeMetrics()` function is a convenience function that will calculate all of the `lakemorpho` metrics for a single `lakeMorpho` object.  It requires an input `lakeMorpho` as well as a `bearing` (for `lakeFetch`) and `pointDens` for maximum lake length and width.
 
 ```{r calcLakeMetrics_example}
 calcLakeMetrics(example_lakeMorpho, 0, 250)
 ```
 
-#### lakeFetch	
+**lakeFetch**
+
 Fetch is the maximum open water distance in a given direction and can be used an indicator of mixing as greater fetch implies greater potential for waves[NEED REF]. The `lakeFetch()` function calculates fetch along an input bearing.  The input bearing may be any value from 0 to 360 where 0 and 360 both represent north, although the fetch for opposite directions (e.g. east and west) are identical.
 
 To calulcate the fetch of an input lake use:
@@ -155,14 +130,16 @@ lakeFetch(example_lakeMorpho, 360)
 lakeFetch(example_lakeMorpho, 270)
 ```
 
-#### lakeMajorAxisLength
+**lakeMajorAxisLength**
+
 The major axis of a lake is defined as the longest line intersecting the convex hull formed around its polygon while passing through its center. 
 
 ```{r lakeMajorAxisLengthExample}
 lakeMajorAxisLength(example_lakeMorpho, addLine = TRUE)
 ```
 
-#### lakeMaxDepth	
+**lakeMaxDepth**	
+
 Maximum lake depth provides information that may be used to, along with flow rates, estimate the residence time of a lake.  While there is no substitute for field verifed measurements, maximum lake depth may be estimated with the surrounding topography. The `lakeMaxDepth()` function uses the methods outlined in Hollister *et al* [-@hollister2011predicting] to provide an estimate of the maximum lake depth.  It requires only a `lakeMorpho` object as input.  Optionally a correction factor based off of verified depth data may be specified is one is known.
 
 The usage for `lakeMaxDepth()` is:
@@ -171,7 +148,8 @@ The usage for `lakeMaxDepth()` is:
 lakeMaxDepth(example_lakeMorpho)
 ```
 
-#### lakeMaxLength
+**lakeMaxLength**
+
 Maximum lake length is the longest open water distance within a lake and, similar to fetch, is a metric that can be used to estimate mixing potential [@lakewatch2001department].  The current implementation of this in `lakemorpho` places points at equal distances apart along the shoreline of the lake and then finds the longest point-to-point distance that also does not intersect land.  This value is returned as the maximum lake length.  An optional parameter, with a default value of `TRUE` allows the `SpatialLines` object to be stored on the input `lakeMorpho` object.
 
 To caluclate maximum lake length requires a `lakeMorpho` object and total number of points to use to find the maximum point-to-point distance.  
@@ -183,7 +161,8 @@ lakeMaxLength(example_lakeMorpho, 250, addLine = FALSE)
 
 The `pointDens` parameter can have an impact on both the processing time and the resulting value and both of these can vary as a function of the complexity of the shape of the lake with less complex lakes providing more consistent lake length across a range of number of points (Figure \ref{fig:pointdens}).  Given this caveat, care must be taken in choosing an appropriate number of points (and thus lines) to use to calculate maximum lake length.  Several densities should be tested and the smallest number of points that produce a stable estimate should be used.
 
-#### lakeMaxWidth
+**lakeMaxWidth**
+
 Maximum lake width is the maximum shore to shore distance that is perpendicular to the line representing maximum lake length and is another metric related to mixing [@lakewatch2001department].  The `lakeMaxWidth` function requires a `lakeMorpho` object and `pointDens` value which is used to determine the number of points along the maximum lake length line. The issue with `pointDens` that was discussed above also exists for the use of `pointDens` with `lakeMaxWidth()` and care should be taken to determine an appropriate number of lines to test.
 
 Usage of lakeMaxWidth is:
@@ -193,14 +172,16 @@ Usage of lakeMaxWidth is:
 lakeMaxWidth(example_lakeMorpho, 250)
 ```
 
-#### lakeMeanDepth	
+**lakeMeanDepth**
+
 Mean depth of a lake is calculated as the volume of the lake divided by the area [@lakewatch2001department].  This function requires only a `lakeMorpho` object and returns a numeric value of the mean depth.  Usage of the function is:
 
 ```{r lakeMeanDepthExample}
 lakeMeanDepth(example_lakeMorpho)
 ```
 
-#### lakeMeanWidth	
+**lakeMeanWidth**
+
 The mean width of a lake is defined as lake area divided by maximum lake length [@lakewatch2001department].  Input for this function is a `lakeMorpho` object that has the maximum lake length line added.  This requirement is checked and returns an error if the maximim length line is missing.
 
 ```{r lakeMeanWidthExample}
@@ -212,14 +193,16 @@ lakeMaxLength(example_lakeMorpho, 100, addLine = TRUE)
 lakeMeanWidth(example_lakeMorpho)
 ```
 
-#### lakeMinorAxisLength
+**lakeMinorAxisLength**
+
 The minor axis of a lake is defined as the shortest line intersecting the convex hull formed around the lake polygon while passing through its center.
 
 ```{r lakeMinorAxisLengthExample}
 lakeMinorAxisLength(example_lakeMorpho, addLine = TRUE)
 ```
 
-#### lakeMinorMajorRatio
+**lakeMinorMajorRatio**
+
 The ratio of the lake major axis length to the minor axis length is also known as the aspect ratio. Circular lakes have aspect ratios approaching 1 while thin-elongated lakes have aspect ratios approaching 0. If major and minor axis length have not already been added to the `lakeMoropho` object these are calculated. The `addLine` argument adds the lines for the lake's minor and major axes to the `lakeMorpho` object.
 
 ```{r lakeMinorMajorRatioExample}
@@ -230,14 +213,16 @@ lakeMinorMajorRatio(example_lakeMorpho, addLine = TRUE)
 Is lakeMinorMajorRatio less sensitive to map scale because it doesn't involve calculating shoreline length?
 -->
 
-#### lakeShorelineDevelopment	
+**lakeShorelineDevelopment**	
+
 The shoreline development metric provides a measure of the complexity of the shoreline.  It is a ratio the perimeter of the lake to the perimeter of a circle of the same area.  Values will be 1 or greater with value of 1 indicating a circular lake.  This metric is used as an indicator of potential habitat [@lakewatch2001department].  It only requires a `lakeMorpho` object as input.
 
 ```{r lakeShorelineDevelopment}
 lakeShorelineDevelopment(example_lakeMorpho)
 ```
 
-#### lakeShorelineLength and lakeSurfaceArea
+**lakeShorelineLength and lakeSurfaceArea**
+
 Shoreline length is simply the total perimeter of the lake polygon and as with all other functions requires a `lakeMorpho` object as input.  To calculate the shoreline length:
 
 ```{r lakeShorelineLength}
@@ -250,8 +235,13 @@ Similarly, surface area for a lake is the total area of the lake polygon.  It is
 lakeSurfaceArea(example_lakeMorpho)
 ```
 
-#### lakeVolume
+**lakeVolume**
+
 The `lakeVolume` function uses maximum lake depth (see lakeMaxDepth) and methods outlined by Hollister *et al.* [-@hollister2010volume] to estimate lake volume.  The method uses the ratio of the maximum depth to the maximum distance... 
+
+# Use Case
+
+# Conclusions
 
 # Software Availability
 
