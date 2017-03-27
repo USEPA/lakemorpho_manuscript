@@ -237,9 +237,21 @@ lakeSurfaceArea(example_lakeMorpho)
 
 **lakeVolume**
 
-The `lakeVolume` function uses maximum lake depth (see lakeMaxDepth) and methods outlined by Hollister *et al.* [-@hollister2010volume] to estimate lake volume.  The method uses the ratio of the maximum depth to the maximum distance... 
+The `lakeVolume` function uses maximum lake depth (see lakeMaxDepth) and methods outlined by Hollister *et al.* [-@hollister2010volume] to estimate lake volume.  The method assumes that the maximum in-lake distance (D~max~) from the shoreline is also the deepest part of the lake (Z~max~).  The `lakeVolume` function creates a raster of the in-lake distance to shoreline and converts those distances, using `Z~max~:D~max~`, to depths and then summing the volume of each pixel to estimate total lake volume.  
+
+```{r lakeVolume}
+lakeVolume(example_lakeMorpho)
+```
 
 # Use Case
+
+A common application of `lakemorpho` is to calculate the full suite of lake metrics for multiple lakes.  This use case demonstrates how to do that with a commonly encountered GIS data file, the shapefile.  
+
+## Read in data
+
+## Loop through lakes with purrr and calc metrics
+
+## Add metrics back to original shapefile
 
 # Conclusions
 
