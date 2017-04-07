@@ -248,13 +248,39 @@ lakeVolume(example_lakeMorpho)
 
 # Use Case
 
-A common application of `lakemorpho` is to calculate the full suite of lake metrics for multiple lakes.  This use case demonstrates how to do that with a commonly encountered GIS data file, the shapefile.  
+A common application of `lakemorpho` is to calculate the full suite of lake metrics for multiple lakes.  This use case demonstrates how to do that with a commonly encountered GIS data file, the shapefile, iterate through the lakes, calculate metrics for those lakes and include the metrics on an output shapefile. 
 
 ## Read in data
 
-## Loop through lakes with purrr and calc metrics
+This use case relies on the `sp` and `rgdal` for the spatial data handling.  These are dependencies for `lakemorpho`, thus no additional installs are required.  To read in the data we utilize `rgdal::readOGR()` and read in the `ri_lakes.shp` from the current directory.
 
-## Add metrics back to original shapefile
+```{r read_lakes}
+# Load packages
+library("sp")
+library("rgdal")
+library("lakemorpho")
+
+# Read the shapefile and plot
+ri_lakes <- readOGR(".","ri_lakes")
+plot(ri_lakes)
+```
+
+## Iterate through lakes and calc metrics
+
+In R, there are many ways to iterate. For simplicity and clarity we use a `for()` loop to iterate through all lakes and calculate the full suite of lake metrics with `calcLakeMetrics()`.  We will utilize the `elevatr` package to access elevation data [@hollister_elevatr]. <!-- Funny business with elevation data and projections.  This assumes z units are same as CRS!  Not the case here as CRS if feet and elevation is m! Change to elevatr... --> 
+
+```{r calc_all, cache=TRUE}
+library(elevatr)
+output <- data.frame()
+for(i in seq_along(ri_lakes)){
+  dem <- get_elev_raster(ri_lakes[i,],z = 12, expand = 1000)
+  lmorph <- lakeSurroundTopo(inLake = ri_lakes[i,], inElev = dem)
+  lmetric <- calcLakeMetrics(lmorph, bearing = 270, pointDens = 100)
+  output <- rbind(output,
+                  data.frame(NAME = ri_lakes[i,]$NAME, data.frame(lmetric)))
+}
+```
+
 
 # Conclusions
 
