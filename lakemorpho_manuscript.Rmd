@@ -316,4 +316,43 @@ library(lakemorpho)
 
 ```
 
+```{r casestudy_map, echo=FALSE, fig.cap="Case study.\\label{fig:casestudy}",cache=FALSE}
+library(sf)
+library(ggplot2)
+library(maps)
+library(rgdal)
+
+ri_lakes <- readOGR(".","ri_lakes")
+ri_outline <- sf::st_as_sf(map("state", "Rhode Island", 
+                               plot = FALSE, fill = TRUE))
+ri_lakes <- sf::st_as_sf(ri_lakes)
+
+labs <- data.frame(sf::st_coordinates(sf::st_centroid(ri_lakes)), 
+                   NAME = as.character(ri_lakes$NAME))
+labs[labs$NAME == "Worden Pond", "Y"] <- 
+  labs[labs$NAME == "Worden Pond", "Y"] - 2000 
+
+inset <- ggplotGrob(
+  ggplot(ri_outline) +
+          geom_sf() + geom_sf(data = ri_lakes, aes(colour = "red")) + 
+          ggtitle("Rhode \n Island") + theme_void() + 
+          theme(plot.background = element_rect(colour = "black"), 
+                legend.position = "none"))
+
+inset_xmax <- 339975
+inset_ymin <- 125764
+
+gg <- ggplot(ri_lakes) + 
+        geom_sf() + 
+        geom_text(data = labs, aes(x = X, y = Y, label = NAME, vjust = 3)) + 
+        theme_bw() + xlab("") + ylab("") + 
+        annotation_custom(grob = inset, 
+                          xmin = inset_xmax,
+                          xmax = inset_xmax * 0.95, 
+                          ymin = inset_ymin, 
+                          ymax = inset_ymin + (inset_ymin * 0.1))
+
+gg
+```
+
 # References
