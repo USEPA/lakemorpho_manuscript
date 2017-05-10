@@ -21,7 +21,6 @@ library("lakemorpho")
 library("rgdal")
 library("sp")
 library("rgeos")
-library("knitr")
 
 opts_chunk$set(dev = 'pdf', fig.width=6, fig.height=5, cache=TRUE)
 
@@ -267,24 +266,39 @@ plot(ri_lakes)
 
 ## Iterate through lakes and calc metrics
 
-In R, there are many ways to iterate. For simplicity and clarity we use a `for()` loop to iterate through all lakes and calculate the full suite of lake metrics with `calcLakeMetrics()`.  We will utilize the `elevatr` package to access elevation data [@hollister_elevatr]. <!-- Funny business with elevation data and projections.  This assumes z units are same as CRS!  Not the case here as CRS if feet and elevation is m! Change to elevatr... --> 
+In R, there are many ways to iterate. For simplicity and clarity we use a `for()` loop to iterate through all lakes and calculate the full suite of lake metrics with `calcLakeMetrics()`.  We will utilize the `elevatr` package which provides access to elevation data for various sources [@hollister_elevatr].  In this example we will use the Amazon Web Services terrain tiles.  The vertical elevation data are in meters and the Rhode Island lake data are projected in Rhode Island State Plane Feet, thus we will convert the elevation data into feet. 
+
+<!-- Funny business with elevation data and projections.  This assumes z units are same as CRS!  Not the case here as CRS is feet and elevation is m! Change to elevatr... --> 
 
 ```{r calc_all, cache=TRUE}
 library(elevatr)
 output <- data.frame()
 for(i in seq_along(ri_lakes)){
-  dem <- get_elev_raster(ri_lakes[i,],z = 12, expand = 1000)
+  dem <- get_elev_raster(ri_lakes[i,],z = 12, expand = 1000, src = "aws") * 3.281
   lmorph <- lakeSurroundTopo(inLake = ri_lakes[i,], inElev = dem)
   lmetric <- calcLakeMetrics(lmorph, bearing = 270, pointDens = 100)
   output <- rbind(output,
-                  data.frame(NAME = ri_lakes[i,]$NAME, data.frame(lmetric)))
+                  data.frame(NAME = ri_lakes[i,]$NAME,
+                             data.frame(lmetric)))
 }
 ```
 
+We can now merge the morphometry metrics back to the lake polygons.
+
+```{r merge_export}
+ri_lakes_m <- merge(ri_lakes,output,by="NAME")
+dplyr::tbl_df(ri_lakes_m)
+```
 
 # Conclusions
 
 <!-- Talk about application to the National Lake Morphometry Dataset and NHDPlus residence time calculations? -->
+The `lakemorpho` package provides functions to calculate common lake morphometry metrics in R.  For those conducting lake analyses in R this allows for streamlined analysis workflows.  Also, `lakemorpho` provides a foundation for additional metrics.  For instance, it might be possible to combine hydrology methods for estimating stream flow into and out of lakes with lake volume and add a function for calculating residence time.  
+
+Beyond adding additional metrics, more fundamental reengineering of the package may also be useful.  For instance, `lakemorpho` currently is built on top of the current spatial data standard for R, `sp`.  This allows a clean interface with many existing tools; however, it is likely that `sp` will be replaced in the next several years by the `sf` package [@pebesma2005sp; @pebesma2017sf].  Future versions of `lakemorpho` might benefit from using the `sf` toolchain and the "tidy data" framework (Need a tidy data citation).
+
+In summary, `lakemorpho` provides limnologists and aquatic ecologists a consistent framework in R for calculating a suite of the most common lake morphometry metrics. This paper outlines the currently available functions and provides an example through a typical use case of calculating many metrics for several lakes.
+
 
 # Software Availability
 
@@ -318,7 +332,7 @@ library(lakemorpho)
 
 ```{r casestudy_map, echo=FALSE, fig.cap="Case study.\\label{fig:casestudy}",cache=FALSE}
 library(sf)
-library(ggplot2)
+library(ggplot2) #as of 2017-04-14 requires dev version for geom_sf
 library(maps)
 library(rgdal)
 
@@ -335,7 +349,7 @@ labs[, "Y"] <-
 
 inset <- ggplotGrob(
   ggplot(ri_outline) +
-          geom_sf() + geom_sf(data = ri_lakes, aes(colour = "red")) + 
+    geom_sf() + geom_sf(data = ri_lakes, aes(colour = "red")) + 
           ggtitle("Rhode \n Island") + theme_void() + 
           theme(plot.background = element_rect(colour = "black"), 
                 legend.position = "none"))
