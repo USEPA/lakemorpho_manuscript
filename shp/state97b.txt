@@ -1,0 +1,260 @@
+Identification_Information:
+  Citation:
+    Citation_Information:
+      Originator: University of Rhode Island Environmental Data Center
+      Publication_Date: 20160516
+      Title: State Boundary; state97b
+      Geospatial_Data_Presentation_Form: vector digital data
+      Publication_Information:
+        Publication_Place: Kingston, RI
+        Publisher: University of Rhode Island Environmental Data Center
+      Other_Citation_Details: Suggested bibliographic reference: RIGIS, 2016. State Boundary (1997); state97b. Rhode Island Geographic Information System (RIGIS) Data Distribution System, URL: http://www.rigis.org, Environmental Data Center, University of Rhode Island, Kingston, Rhode Island (last date accessed: 16 May 2016).
+      Online_Linkage: http://www.rigis.org
+      Larger_Work_Citation:
+        Citation_Information:
+          Originator: Rhode Island Geographic Information System (RIGIS)
+          Publication_Date: 1993
+          Title: Rhode Island Geographic Information System (RIGIS) Data Distribution System
+          Online_Linkage: http://www.rigis.org
+  Description:
+    Abstract: Representative political boundary lines for the State of Rhode Island.  Includes physical shoreline features for bay and coastal waters.
+    Purpose: General mapping, graphic display and GIS analysis of the State of Rhode Island political boundary.
+  Time_Period_of_Content:
+    Time_Period_Information:
+      Single_Date/Time:
+        Calendar_Date: 2001
+    Currentness_Reference: publication date
+  Status:
+    Progress: Complete
+    Maintenance_and_Update_Frequency: None planned
+  Spatial_Domain:
+    Bounding_Coordinates:
+      West_Bounding_Coordinate: -71.896602
+      East_Bounding_Coordinate: -71.117438
+      North_Bounding_Coordinate: 42.018935
+      South_Bounding_Coordinate: 41.145927
+  Keywords:
+    Theme:
+      Theme_Keyword_Thesaurus: ISO 19115 Topic Category
+      Theme_Keyword: boundaries
+    Theme:
+      Theme_Keyword_Thesaurus: None
+      Theme_Keyword: Boundaries
+      Theme_Keyword: Coastline
+    Place:
+      Place_Keyword_Thesaurus: none
+      Place_Keyword: United States
+      Place_Keyword: Rhode Island
+      Place_Keyword: northeast
+      Place_Keyword: New England
+  Access_Constraints: None
+  Use_Constraints: This dataset is provided 'as is.’  The producer(s) of this dataset, contributors to this dataset, the Rhode Island Geographic Information System (RIGIS) consortium, the State of Rhode Island, and the University of Rhode Island do not make any warranties of any kind for this dataset, and are not liable for any loss or damage however and whenever caused by any use of this dataset. Please acknowledge both RIGIS and the primary producer(s) of this dataset in any derived products.  Versions of the RIGIS logo suitable for both printed and web-based products are available at http://www.rigis.org/logos.
+  Point_of_Contact:
+    Contact_Information:
+      Contact_Organization_Primary:
+        Contact_Organization: University of Rhode Island Environmental Data Center
+        Contact_Person: Erica Tefft
+      Contact_Position: Research Associate
+      Contact_Address:
+        Address_Type: mailing and physical address
+        Address: Coastal Institute
+        Address: 1 Greenhouse Road
+        City: Kingston
+        State_or_Province: RI
+        Postal_Code: 02881
+      Contact_Voice_Telephone: 401-874-5054
+      Contact_Electronic_Mail_Address: erica@edc.uri.edu
+  Native_Data_Set_Environment: Microsoft Windows 7 Version 6.1 (Build 7601) Service Pack 1; Esri ArcGIS 10.3.1.4959
+Data_Quality_Information:
+  Attribute_Accuracy:
+    Attribute_Accuracy_Report: None
+  Logical_Consistency_Report: None
+  Completeness_Report: Represents all five of Rhode Island's counties.
+  Positional_Accuracy:
+    Horizontal_Positional_Accuracy:
+      Horizontal_Positional_Accuracy_Report: None
+  Lineage:
+    Source_Information:
+      Source_Citation:
+        Citation_Information:
+          Originator: Rhode Island Dept. of Transportation, MIS/GIS Section, Two Capital Hill, Providence, R.I.  02908-5872
+          Publication_Date: 200108
+          Title: Municipal Boundaries (1997); muni97
+          Geospatial_Data_Presentation_Form: vector digital data
+          Publication_Information:
+            Publication_Place: Providence, Rhode Island
+            Publisher: RIGIS
+          Other_Citation_Details: Suggested bibliographic reference: RIGIS, 2001. Municipal Boundaries (1997); muni97. Rhode Island Geographic Information System (RIGIS) Data Distribution System, URL: http://www.edc.uri.edu/rigis, Environmental Data Center, University of Rhode Island, Kingston, Rhode Island (last date accessed: 16 July 2015).
+          Online_Linkage: http://www.edc.uri.edu/rigis
+      Source_Scale_Denominator: 5000
+      Type_of_Source_Media: digital file
+      Source_Time_Period_of_Content:
+        Time_Period_Information:
+          Single_Date/Time:
+            Calendar_Date: 2001
+        Source_Currentness_Reference: publication date
+      Source_Citation_Abbreviation: muni97
+      Source_Contribution: spatial features and attribute data
+    Process_Step:
+      Process_Description: Dissolved the Municipal Boundaries (1997) dataset available from RIGIS based upon its LAND attribute field.
+      Source_Used_Citation_Abbreviation: muni97
+      Process_Date: 20150716
+      Process_Contact:
+        Contact_Information:
+          Contact_Organization_Primary:
+            Contact_Organization: Environmental Data Center, University of Rhode Island
+            Contact_Person: Greg Bonynge
+          Contact_Position: Geospatial Extension Specialist
+          Contact_Address:
+            Address_Type: mailing and physical
+            Address: 1 Greenhouse Road
+            City: Kingston
+            State_or_Province: Rhode Island
+            Postal_Code: 02881
+            Country: US
+          Contact_Voice_Telephone: 401-874-2180
+          Contact_Electronic_Mail_Address: greg@edc.uri.edu
+          Contact_Instructions: email preferred
+    Process_Step:
+      Process_Description: Updated Point of Contact information for this dataset from "Stephen Kut" to "Erica Tefft."
+      Process_Date: 20150601
+      Process_Contact:
+        Contact_Information:
+          Contact_Organization_Primary:
+            Contact_Organization: University of Rhode Island Environmental Data Center
+            Contact_Person: Erica Tefft
+          Contact_Position: Research Associate
+          Contact_Address:
+            Address_Type: mailing and physical address
+            Address: Coastal Institute
+            Address: 1 Greenhouse Road
+            City: Kingston
+            State_or_Province: RI
+            Postal_Code: 02881
+          Contact_Voice_Telephone: 401-874-5054
+          Contact_Electronic_Mail_Address: erica@edc.uri.edu
+    Process_Step:
+      Process_Description: There were 6 polygons with no associated attribute features, these were updated based on recent updates made to the muni97 dataset.
+      Process_Date: 20160516
+      Process_Contact:
+        Contact_Information:
+          Contact_Organization_Primary:
+            Contact_Organization: University of Rhode Island Environmental Data Center
+            Contact_Person: Erica Tefft
+          Contact_Position: Research Associate
+          Contact_Address:
+            Address_Type: mailing and physical address
+            Address: Coastal Institute
+            Address: 1 Greenhouse Road
+            City: Kingston
+            State_or_Province: RI
+            Postal_Code: 02881
+          Contact_Voice_Telephone: 401-874-5054
+          Contact_Electronic_Mail_Address: erica@edc.uri.edu
+Spatial_Data_Organization_Information:
+  Direct_Spatial_Reference_Method: Vector
+  Point_and_Vector_Object_Information:
+    SDTS_Terms_Description:
+      SDTS_Point_and_Vector_Object_Type: GT-polygon composed of chains
+      Point_and_Vector_Object_Count: 357
+Spatial_Reference_Information:
+  Horizontal_Coordinate_System_Definition:
+    Planar:
+      Map_Projection:
+        Map_Projection_Name: NAD 1983 StatePlane Rhode Island FIPS 3800 Feet
+        Transverse_Mercator:
+          Scale_Factor_at_Central_Meridian: 0.99999375
+          Longitude_of_Central_Meridian: -71.5
+          Latitude_of_Projection_Origin: 41.08333333333334
+          False_Easting: 328083.3333333333
+          False_Northing: 0.0
+      Planar_Coordinate_Information:
+        Planar_Coordinate_Encoding_Method: coordinate pair
+        Coordinate_Representation:
+          Abscissa_Resolution: 0.000000007286382608384659
+          Ordinate_Resolution: 0.000000007286382608384659
+        Planar_Distance_Units: foot_us
+    Geodetic_Model:
+      Horizontal_Datum_Name: D North American 1983
+      Ellipsoid_Name: GRS 1980
+      Semi-major_Axis: 6378137.0
+      Denominator_of_Flattening_Ratio: 298.257222101
+Entity_and_Attribute_Information:
+  Detailed_Description:
+    Entity_Type:
+      Entity_Type_Label: state97
+      Entity_Type_Definition: Polygons representing the State of Rhode Island political boundaries.
+      Entity_Type_Definition_Source: University of Rhode Island Environmental Data Center
+    Attribute:
+      Attribute_Label: FID
+      Attribute_Definition: Internal feature number.
+      Attribute_Definition_Source: Esri
+      Attribute_Domain_Values:
+        Unrepresentable_Domain: Sequential unique whole numbers that are automatically generated.
+    Attribute:
+      Attribute_Label: Shape
+      Attribute_Definition: Feature geometry.
+      Attribute_Definition_Source: Esri
+      Attribute_Domain_Values:
+        Unrepresentable_Domain: Coordinates defining the features.
+    Attribute:
+      Attribute_Label: LAND
+      Attribute_Definition: Indicates whether or not the feature represents land or a closed coastal water body, such as a salt pond.
+      Attribute_Definition_Source: unknown
+      Attribute_Domain_Values:
+        Enumerated_Domain:
+          Enumerated_Domain_Value: N
+          Enumerated_Domain_Value_Definition: not land
+          Enumerated_Domain_Value_Definition_Source: unknown
+        Enumerated_Domain:
+          Enumerated_Domain_Value: Y
+          Enumerated_Domain_Value_Definition: represents land
+          Enumerated_Domain_Value_Definition_Source: unknown
+Distribution_Information:
+  Distributor:
+    Contact_Information:
+      Contact_Organization_Primary:
+        Contact_Organization: University of Rhode Island Environmental Data Center
+        Contact_Person: Erica Tefft
+      Contact_Address:
+        Address_Type: mailing and physical
+        Address: 1 Greenhouse Road
+        City: Kingston
+        State_or_Province: RI
+        Postal_Code: 02881
+      Contact_Voice_Telephone: 401-874-5054
+      Contact_Electronic_Mail_Address: erica@edc.uri.edu
+      Contact_Instructions: email preferred
+  Distribution_Liability: This dataset is provided 'as is.'  The producer(s) of this dataset, contributors to this dataset, the Rhode Island Geographic Information System (RIGIS) consortium, the State of Rhode Island, and the University of Rhode Island do not make any warranties of any kind for this dataset, and are not liable for any loss or damage however and whenever caused by any use of this dataset.
+  Standard_Order_Process:
+    Digital_Form:
+      Digital_Transfer_Information:
+        Format_Name: Esri shapefile
+        File_Decompression_Technique: ZIP
+      Digital_Transfer_Option:
+        Online_Option:
+          Computer_Contact_Information:
+            Network_Address:
+              Network_Resource_Name: http://www.rigis.org
+    Fees: No fee for downloading directly from the RIGIS Data Distribution System located at http://www.edc.uri.edu/rigis.
+Metadata_Reference_Information:
+  Metadata_Date: 20150723
+  Metadata_Review_Date: 20160516
+  Metadata_Contact:
+    Contact_Information:
+      Contact_Organization_Primary:
+        Contact_Organization: Environmental Data Center, University of Rhode Island
+        Contact_Person: Greg Bonynge
+      Contact_Position: Geospatial Extension Specialist
+      Contact_Address:
+        Address_Type: mailing and physical
+        Address: 1 Greenhouse Road
+        City: Kingston
+        State_or_Province: Rhode Island
+        Postal_Code: 02881
+        Country: US
+      Contact_Voice_Telephone: 401-874-2180
+      Contact_Electronic_Mail_Address: greg@edc.uri.edu
+      Contact_Instructions: email preferred
+  Metadata_Standard_Name: FGDC Content Standard for Digital Geospatial Metadata
+  Metadata_Standard_Version: FGDC-STD-001-1998
