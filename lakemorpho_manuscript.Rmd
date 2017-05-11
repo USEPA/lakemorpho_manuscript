@@ -337,14 +337,15 @@ library(maps)
 library(rgdal)
 
 ri_lakes <- readOGR(".","ri_lakes")
-ri_outline <- sf::st_as_sf(map("state", "Rhode Island", 
-                               plot = FALSE, fill = TRUE))
+# ri_outline <- sf::st_as_sf(map("state", "Rhode Island", 
+#                                plot = FALSE, fill = TRUE))
+ri_outline <- sf::st_read("shp/state97b.shp")
 ri_lakes <- sf::st_as_sf(ri_lakes)
 
 labs <- data.frame(sf::st_coordinates(sf::st_centroid(ri_lakes)), 
                    NAME = as.character(ri_lakes$NAME))
-labs[labs$NAME == "Worden Pond", "Y"] <- 
-  labs[labs$NAME == "Worden Pond", "Y"] - 2000 
+labs[, "Y"] <- 
+  labs["Y"] + c(-1000, -500, -2090, 0, 0)
 
 inset <- ggplotGrob(
   ggplot(ri_outline) +
@@ -361,8 +362,8 @@ gg <- ggplot(ri_lakes) +
         geom_text(data = labs, aes(x = X, y = Y, label = NAME, vjust = 3)) + 
         theme_bw() + xlab("") + ylab("") + 
         annotation_custom(grob = inset, 
-                          xmin = inset_xmax,
-                          xmax = inset_xmax * 0.95, 
+                          xmin = inset_xmax * 0.95,
+                          xmax = inset_xmax, 
                           ymin = inset_ymin, 
                           ymax = inset_ymin + (inset_ymin * 0.1))
 
