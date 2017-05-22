@@ -55,9 +55,9 @@ new zmax argument
 
 The study and quantificaiton of lake shape (i.e. lake morphology and morphometry) is one of the foundations of limnology and for students of limnology, some of the first lessons are centered around a typical suite of metrics and how to calculate them [e.g. @wetzel2001limnology].  It is also widely accepted that the morphometry of lakes and ponds can impact available nutrients and thus overall productivity.  For instance, the widely used Vollenweider input-output models that are used to estimate nutrient concentrations rely on hydraulic residence time and sometimes mean depth, both of which are derived from total lake volume [@vollenweider1975input; @milstead2013estimating]. Also, clear water versus turbid water states in lakes have been linked in part to lake morphometry, in particular mean depth [@genkai2005eutrophication].  In short, limnologists have long recognized the importance of lake morphology as one factor controlling a variety of ecological processes in lakes.
 
-Traditional methods for calculating lake morphometry metrics have relied upon the use of paper bathymetry maps, planimeters, or simple heuristics based on their values relative to other metrics that may not hold in all settings [@kalff2002limnology; @welch1935limnology; @wetzel2000limnological; @hollister2010volume]. In addition, detailed bathymetry is a requirement for the calculation of most lake morphometry metrics, but is generally only available for a relatively small number of lakes. Although this is not a problem when the focus of a study is a single lake, a small number of lakes, or a group of well-studied lakes, reliance on complete bathymetry becomes a limitation when attempting to conduct regional or national-scale lake studies. In these cases, alternative approaches for estimating lake morphometry are required.  
+Traditional methods for calculating lake morphometry metrics have relied upon the use of paper bathymetry maps, planimeters, or simple heuristics based on their values relative to other metrics that may not hold in all settings [@kalff2002limnology; @welch1935limnology; @wetzel2000limnological; @hollister2010volume]. In addition, detailed bathymetry is a requirement for the calculation of most lake morphometry metrics, but is generally only available for a relatively small number of lakes. Although this is not a problem when the focus of a study is a single lake, a small number of lakes, or a group of well-studied lakes, reliance on complete bathymetry becomes a limitation when attempting to conduct regional or national-scale lake studies. For instance, Soranno *et al.* [-@sorrano_2015_lagos] found that for some water quality datasets lake depth, in spite of its importance, was not always avaialble.  In cases such as these, alternative approaches for estimating lake morphometry are required.  
 
-Recent work has demonstrated the ability to estimate many of these metrics from ubiquitous spatial data.  For instance, maximum depth and lake volume may be predicted using the lake polygon and surrounding topography [@hollister2010volume; @hollister2011predicting;@messager2016estimating;@oliver2016prediction] <!--Need to add recent additional papers on lake depth--> provided by the National Hydrography Dataset Plus and the National Elevation Dataset, respectively [e.g. @usepa2005national;@gesch2009national]. The initial development of these tools were developed with proprietary tools thus limiting their use.  In an effort to reach a broader audience the tools were converted to R, expanded to include a more complete suite of lake morphometry metrics and compiled into an R Package.
+Recent work has demonstrated the ability to estimate many of these metrics from ubiquitous spatial data.  For instance, maximum depth and lake volume may be predicted using the lake polygon and surrounding topography [@hollister2010volume; @hollister2011predicting;@messager2016estimating;@oliver2016prediction] provided by the National Hydrography Dataset Plus and the National Elevation Dataset, respectively [e.g. @usepa2005national;@gesch2009national]. The initial development of these tools were developed with proprietary tools thus limiting their use.  In an effort to reach a broader audience the tools were converted to R, expanded to include a more complete suite of lake morphometry metrics and compiled into an R Package.
 
 # Methods
 
@@ -184,6 +184,12 @@ Mean depth of a lake is calculated as the volume of the lake divided by the area
 lakeMeanDepth(example_lakeMorpho)
 ```
 
+There is an optional `zmax` argument that allows a user to specify a maximum lake depth if one is available.  If not supplied, the maximum depth will be estimated using `lakeMaxDepth`.  For instance, in the above example, the maximum depth without using a correction factor is estimated at 99 meters which results in a mean depth estimate of `r round(lakeMeanDepth(inputLM),2)`.  The measured maximum depth is much less at 32 meters.  To use this infromation you would simply add this in for the `zmax` argument.
+
+```{r lakeMeanDepth_zmax}
+lakeMeanDepth(inputLM, zmax = 32)
+```
+
 **lakeMeanWidth**
 
 The mean width of a lake is defined as lake area divided by maximum lake length [@lakewatch2001department].  Input for this function is a `lakeMorpho` object that has the maximum lake length line added.  This requirement is checked and returns an error if the maximum length line is missing.
@@ -246,6 +252,8 @@ The `lakeVolume` function uses maximum lake depth (see lakeMaxDepth) and methods
 ```{r lakeVolume}
 lakeVolume(example_lakeMorpho)
 ```
+
+Similar to `lakeMeanDepth`, there is a `zmax` argument to be used for a known maximum lake depth.
 
 # Use Case
 
