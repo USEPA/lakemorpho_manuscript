@@ -22,7 +22,7 @@ library("rgdal")
 library("sp")
 library("rgeos")
 
-opts_chunk$set(dev = 'pdf', fig.width=6, fig.height=5, cache=TRUE)
+opts_chunk$set(dev = 'png', fig.width=6, fig.height=5, cache=TRUE)
 
 # Table Captions from @DeanK on http://stackoverflow.com/questions/15258233/using-table-caption-on-r-markdown-file-using-knitr-to-use-in-pandoc-to-convert-t
 #Figure captions are handled by LaTeX
@@ -46,16 +46,11 @@ knit_hooks$set(output = function(x, options) {
 #Place tables and figures and numerical results where they need to go.
 ```
 
-<!-- 
-Notes on stuff to add
-new zmax argument
--->
-
 # Introduction
 
 The study and quantificaiton of lake shape (i.e. lake morphology and morphometry) is one of the foundations of limnology and for students of limnology, some of the first lessons are centered around a typical suite of metrics and how to calculate them [e.g. @wetzel2001limnology].  It is also widely accepted that the morphometry of lakes and ponds can impact available nutrients and thus overall productivity.  For instance, the widely used Vollenweider input-output models that are used to estimate nutrient concentrations rely on hydraulic residence time and sometimes mean depth, both of which are derived from total lake volume [@vollenweider1975input; @milstead2013estimating]. Also, clear water versus turbid water states in lakes have been linked in part to lake morphometry, in particular mean depth [@genkai2005eutrophication].  In short, limnologists have long recognized the importance of lake morphology as one factor controlling a variety of ecological processes in lakes.
 
-Traditional methods for calculating lake morphometry metrics have relied upon the use of paper bathymetry maps, planimeters, or simple heuristics based on their values relative to other metrics that may not hold in all settings [@kalff2002limnology; @welch1935limnology; @wetzel2000limnological; @hollister2010volume]. In addition, detailed bathymetry is a requirement for the calculation of most lake morphometry metrics, but is generally only available for a relatively small number of lakes. Although this is not a problem when the focus of a study is a single lake, a small number of lakes, or a group of well-studied lakes, reliance on complete bathymetry becomes a limitation when attempting to conduct regional or national-scale lake studies. For instance, Soranno *et al.* [-@sorrano_2015_lagos] found that for some water quality datasets lake depth, in spite of its importance, was not always avaialble.  In cases such as these, alternative approaches for estimating lake morphometry are required.  
+Traditional methods for calculating lake morphometry metrics have relied upon the use of paper bathymetry maps, planimeters, or simple heuristics based on their values relative to other metrics that may not hold in all settings [@kalff2002limnology; @welch1935limnology; @wetzel2000limnological; @hollister2010volume]. In addition, detailed bathymetry is a requirement for the calculation of most lake morphometry metrics, but is generally only available for a relatively small number of lakes. Although this is not a problem when the focus of a study is a single lake, a small number of lakes, or a group of well-studied lakes, reliance on complete bathymetry becomes a limitation when attempting to conduct regional or national-scale lake studies. For instance, Soranno *et al.* found that for some water quality datasets lake depth, in spite of its importance, was not always avaialble [@soranno2015lagos].  In cases such as these, alternative approaches for estimating lake morphometry are required.  
 
 Recent work has demonstrated the ability to estimate many of these metrics from ubiquitous spatial data.  For instance, maximum depth and lake volume may be predicted using the lake polygon and surrounding topography [@hollister2010volume; @hollister2011predicting;@messager2016estimating;@oliver2016prediction] provided by the National Hydrography Dataset Plus and the National Elevation Dataset, respectively [e.g. @usepa2005national;@gesch2009national]. The initial development of these tools were developed with proprietary tools thus limiting their use.  In an effort to reach a broader audience the tools were converted to R, expanded to include a more complete suite of lake morphometry metrics and compiled into an R Package.
 
@@ -163,7 +158,7 @@ To calculate maximum lake length use:
 lakeMaxLength(example_lakeMorpho, 250, addLine = FALSE)
 ```
 
-The `pointDens` parameter can have an impact on both the processing time and the resulting value and both of these can vary as a function of the complexity of the shape of the lake with less complex lakes providing more consistent lake length across a range of number of points (Figure \ref{fig:pointdens}).  Given this caveat, care must be taken in choosing an appropriate number of points (and thus lines) to use to calculate maximum lake length.  Several densities should be tested and the smallest number of points that produce a stable estimate should be used.
+The `pointDens` parameter can have an impact on both the processing time and the resulting value and both of these can vary as a function of the complexity of the shape of the lake with less complex lakes providing more consistent lake length across a range of number of points.  Given this caveat, care must be taken in choosing an appropriate number of points (and thus lines) to use to calculate maximum lake length.  Several densities should be tested and the smallest number of points that produce a stable estimate should be used.
 
 **lakeMaxWidth**
 
@@ -257,13 +252,13 @@ Similar to `lakeMeanDepth`, there is a `zmax` argument to be used for a known ma
 
 # Use Case
 
-A common application of `lakemorpho` is to calculate the full suite of lake metrics for multiple lakes.  This use case demonstrates how to do that with a commonly encountered GIS data file, the shapefile, iterate through the lakes, calculate metrics for those lakes and include the metrics on an output shapefile. The data for this use case is from Rhode Island.  The lakes data were downloaded from the Rhode Island Geographic Information Systems (RIGIS)[@rigis_lakes] and the elevation data are from Amazon Web Services Terrain Tiles via the `elevatr` pacakge [@hollister_elevatr].
+A common application of `lakemorpho` is to calculate the full suite of lake metrics for multiple lakes.  This use case demonstrates how to do that with a commonly encountered GIS data file, the shapefile, iterate through the lakes, calculate metrics for those lakes and include the metrics on an output shapefile. The data for this use case is from Rhode Island  (Figure \ref{fig:casestudy_map}).  The lakes data were downloaded from the Rhode Island Geographic Information Systems (RIGIS)[@rigis_lakes] and the elevation data are from Amazon Web Services Terrain Tiles via the `elevatr` pacakge [@hollister_elevatr].
 
 ## Read in data
 
 This use case relies on the `sp` and `rgdal` for the spatial data handling.  These are dependencies for `lakemorpho`, thus no additional installs are required.  To read in the data we utilize `rgdal::readOGR()` and read in the `ri_lakes.shp` from the current directory.
 
-```{r read_lakes}
+```{r readlakes}
 # Load packages
 library("sp")
 library("rgdal")
@@ -336,21 +331,17 @@ library(lakemorpho)
 
 # Figures
 
-```{r pointdens, echo=FALSE, fig.cap="Variation in estimates of maximum lake length as a function of both point density along the shoreline and lake shape complexity.\\label{fig:pointdens}",cache=FALSE}
-
-```
-
-```{r casestudy_map, echo=FALSE, fig.cap="Case study.\\label{fig:casestudy}",cache=FALSE}
+```{r casestudymap, echo=FALSE, fig.cap="Case study.\\label{fig:casestudy_map}",cache=FALSE,message=FALSE,warning=FALSE}
 library(sf)
 library(ggplot2) #as of 2017-04-14 requires dev version for geom_sf
 library(maps)
 library(rgdal)
 
-ri_lakes <- readOGR(".","ri_lakes")
+ri_lakes <- st_read("ri_lakes.shp", quiet = TRUE)
 # ri_outline <- sf::st_as_sf(map("state", "Rhode Island", 
 #                                plot = FALSE, fill = TRUE))
-ri_outline <- sf::st_read("shp/state97b.shp")
-ri_lakes <- sf::st_as_sf(ri_lakes)
+ri_outline <- sf::st_read("shp/state97b.shp", quiet = TRUE)
+#ri_lakes <- sf::st_as_sf(ri_lakes)
 
 labs <- data.frame(sf::st_coordinates(sf::st_centroid(ri_lakes)), 
                    NAME = as.character(ri_lakes$NAME))
