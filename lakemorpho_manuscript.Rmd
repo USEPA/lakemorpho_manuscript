@@ -242,7 +242,7 @@ Similar to `lakeMeanDepth`, there is a `zmax` argument to be used for a known ma
 
 # Use Case
 
-A common application of `lakemorpho` is to calculate the full suite of lake metrics for multiple lakes.  This use case demonstrates how to do that with a commonly encountered GIS data file, the shapefile.  To do this we iterate through the lakes, calculate metrics for each lake and include the metrics on an output shapefile. The data for this use case is from Rhode Island  (Figure \ref{fig:casestudy_map}).  The data for the lakes were downloaded from the Rhode Island Geographic Information Systems (RIGIS)[@rigis_lakes] and the elevation data are from Amazon Web Services Terrain Tiles via the `elevatr` package [@hollister_elevatr].
+A common application of `lakemorpho` is to calculate the full suite of lake metrics for multiple lakes.  This use case demonstrates how to do that with a commonly encountered GIS data file, the shapefile.  To do this we iterate through the lakes, calculate metrics for each lake and include the metrics on an output shapefile. The data for this use case is from Rhode Island  (Figure 1).  The data for the lakes were downloaded from the Rhode Island Geographic Information Systems (RIGIS)[@rigis_lakes] and the elevation data are from Amazon Web Services Terrain Tiles via the `elevatr` package [@hollister_elevatr].
 
 ## Read in data
 
@@ -256,7 +256,6 @@ library("lakemorpho")
 
 # Read the shapefile and plot
 ri_lakes <- readOGR(".","ri_lakes")
-plot(ri_lakes)
 ```
 
 ## Iterate through lakes and calculate metrics
@@ -317,7 +316,9 @@ library(lakemorpho)
 
 # Figures
 
-```{r casestudymap, echo=FALSE, fig.cap="Case study.\\label{fig:casestudy_map}",cache=FALSE,message=FALSE,warning=FALSE}
+Figure 1. Map of lakes used in case study example of the `lakemorpho` package.
+
+```{r casestudymap,echo=FALSE,cache=FALSE,message=FALSE,warning=FALSE}
 library(sf)
 library(ggplot2) #as of 2017-04-14 requires dev version for geom_sf
 library(maps)
