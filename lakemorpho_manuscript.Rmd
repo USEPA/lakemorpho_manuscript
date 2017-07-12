@@ -181,22 +181,19 @@ lakeMeanDepth(inputLM, zmax = 32)
 
 **lakeMeanWidth**
 
-The mean width of a lake is defined as lake area divided by maximum lake length [@lakewatch2001department; @wetzel2001limnology].  Input for this function is a `lakeMorpho` object that has the maximum lake length line added.  This requirement is checked and returns an error if the maximum length line is missing.
+The mean width of a lake is defined as lake area divided by maximum lake length [@lakewatch2001department; @wetzel2001limnology].  Input for this function is a `lakeMorpho` object that has the maximum lake length line added via 'lakeMaxLength()`.  This requirement is checked and returns an error if the maximum length line is missing.
 
 
 ```{r lakeMeanWidthExample}
-# Throws an error if maximum lake length is missing
-lakeMeanWidth(example_lakeMorpho)
-
-# Adds maximum lake length line
-
-lakeMaxLength(example_lakeMorpho, 100, addLine = TRUE)
+# Add the maximum lake length line
+lakeMaxLength(example_lakeMorpho, pointDens = 100, addLine = TRUE)
+# Calculate mean width
 lakeMeanWidth(example_lakeMorpho)
 ```
 
 **lakeMinorAxisLength**
 
-The minor axis of a lake is defined as the shortest line intersecting the convex hull formed around the lake polygon while passing through its center. In contrast to `lakeMaxWidth`, its value represents the distance across a lake without regard to land-water configuration.  
+The minor axis of a lake is defined as the shortest line intersecting the convex hull formed around the lake polygon while passing through its center. In contrast to `lakeMaxWidth`, its value represents the distance across a lake with regard to the the convex hull and without consideration of the land-water configuration.  
 
 ```{r lakeMinorAxisLengthExample}
 lakeMinorAxisLength(example_lakeMorpho, addLine = TRUE)
@@ -249,7 +246,7 @@ A common application of `lakemorpho` is to calculate the full suite of lake metr
 
 ## Read in data
 
-This use case relies on the `sp` and `rgdal` packages for the spatial data handling.  These are dependencies for `lakemorpho`, thus no additional installs are required.  To read in the data we utilize `rgdal::readOGR()` and read in the `ri_lakes.shp` from the current directory.
+This use case relies on the `sp` and `rgdal` packages for the spatial data handling.  These are dependencies for `lakemorpho`, thus no additional installs are required.  To read in the data we utilized `rgdal::readOGR()` and read in the `ri_lakes.shp` from the current directory.
 
 ```{r readlakes}
 # Load packages
