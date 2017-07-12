@@ -63,6 +63,7 @@ A typical workflow for using `lakemorpho` to calculate lake metrics would includ
 pulling spatial data into R (e.g. as shapefiles, tiff, etc.), creating a `lakeMorpho` object  and calculating the desired lake morphometry metrics.  The following sections provide details on the type of input data required and demonstrate use of the available functions with the provided example data.
 
 ### The `lakeMorpho` Class and `lakeSurroundTopo`  
+
 Many of the lake morphometry metrics rely on the same information about the lake.  For instance, the functions to estimate maximum depth, mean depth, and volume rely on statistical summaries of the surrounding topography as well as the maximum in-lake distance to shoreline [@hollister2011predicting; @hollister2010volume]. To avoid recalculating these values, a `lakeMorpho` class was created to link information on surrounding topography to the original datasets. All lake morphometry functions in the the `lakemorpho` package require an object of class `lakeMorpho` as input. Some functions also return an updated `lakeMorpho` object that includes calculated spatial objects as output. At a minimum, a `lakeMorpho` object contains:
 
 - "lake" - A `SpatialPolygons` or `SpatialPolygonsDataFrame` object of the original input lake data.
@@ -91,9 +92,7 @@ The resulting object contains the minimum set of components that make up a `lake
 lapply(example_lakeMorpho,class)
 ```
 
-
 ### Lake Morphometry Functions
-
 Each of the remaining functions expects a `lakeMorpho` object as input and returns a numeric value.  Some of the functions also have a side effect of adding a spatial object to the input `lakeMorpho` object. 
 
 **calcLakeMetrics** 
@@ -184,11 +183,13 @@ lakeMeanDepth(inputLM, zmax = 32)
 
 The mean width of a lake is defined as lake area divided by maximum lake length [@lakewatch2001department; @wetzel2001limnology].  Input for this function is a `lakeMorpho` object that has the maximum lake length line added.  This requirement is checked and returns an error if the maximum length line is missing.
 
+
 ```{r lakeMeanWidthExample}
 # Throws an error if maximum lake length is missing
 lakeMeanWidth(example_lakeMorpho)
 
 # Adds maximum lake length line
+
 lakeMaxLength(example_lakeMorpho, 100, addLine = TRUE)
 lakeMeanWidth(example_lakeMorpho)
 ```
@@ -220,6 +221,7 @@ lakeShorelineDevelopment(example_lakeMorpho)
 **lakeShorelineLength and lakeSurfaceArea**
 
 Shoreline length is simply the total perimeter of the lake polygon and, as with all other functions, requires a `lakeMorpho` object as input.  To calculate the shoreline length:
+
 
 ```{r lakeShorelineLength}
 lakeShorelineLength(example_lakeMorpho)
@@ -291,7 +293,6 @@ The `lakemorpho` package provides functions to calculate common lake morphometry
 Beyond adding additional metrics, more fundamental reengineering of the package may also be useful.  For instance, `lakemorpho` currently is built on top of the current spatial data standard for R, `sp`.  This allows a clean interface with many existing tools; however, it is likely that `sp` will be replaced in the next several years by the `sf` package [@pebesma2005sp; @pebesma2017sf].  Future versions of `lakemorpho` might benefit from using the `sf` toolchain and the "tidy data" framework [@wickham_tidy].
 
 In summary, `lakemorpho` provides limnologists and aquatic ecologists a consistent framework in R for calculating a suite of the most common lake morphometry metrics. This paper outlines the currently available functions and provides an example through a typical use case of calculating many metrics for several lakes.
-
 
 # Software Availability
 
