@@ -314,6 +314,10 @@ install_github('USEPA/lakemorpho')
 library(lakemorpho)
 ```
 
+# Acknowledgements 
+
+We would like to thank Stephen Shivers, Betty Kreakie, Bryan Milstead, Joe LiVolsi, Tim Gleason, and Wayne Munns for constructive reviews of this paper. Special thanks to TBD for reviews of the submitted manuscript. This paper has not been subjected to Agency review. Therefore, it does not necessary reflect the views of the Agency. Mention of trade names or commercial products does not constitute endorsement or recommendation for use. This contribution is identified by the tracking number ORD-022603 of the Atlantic Ecology Division, Office of Research and Development, National Health and Environmental Effects Research Laboratory, US Environmental Protection Agency.
+
 # Figures
 
 Figure 1. Map of lakes used in case study example of the `lakemorpho` package.
