@@ -64,7 +64,7 @@ pulling spatial data into R (e.g. as shapefiles, tiff, etc.), creating a `lakeMo
 
 ### The `lakeMorpho` Class and `lakeSurroundTopo`  
 
-Many of the lake morphometry metrics rely on the same information about the lake.  For instance, the functions to estimate maximum depth, mean depth, and volume rely on statistical summaries of the surrounding topography as well as the maximum in-lake distance to shoreline [@hollister2011predicting; @hollister2010volume]. To avoid recalculating these values, a `lakeMorpho` S3 class was created to link information on surrounding topography to the original datasets and facilitate defualt plotting of the outputs. All lake morphometry functions in the the `lakemorpho` package require an object of class `lakeMorpho` as input. Some functions also return an updated `lakeMorpho` object that includes calculated spatial objects as output. At a minimum, a `lakeMorpho` object contains:
+Many of the lake morphometry metrics rely on the same information about the lake.  For instance, the functions to estimate maximum depth, mean depth, and volume rely on statistical summaries of the surrounding topography as well as the maximum in-lake distance to shoreline [@hollister2011predicting; @hollister2010volume]. To avoid recalculating these values, a `lakeMorpho` S3 class was created to link information on surrounding topography to the original datasets and facilitate default plotting of the outputs. All lake morphometry functions in the the `lakemorpho` package require an object of class `lakeMorpho` as input. Some functions also return an updated `lakeMorpho` object that includes calculated spatial objects as output. At a minimum, a `lakeMorpho` object contains:
 
 - "lake" - A `SpatialPolygons` or `SpatialPolygonsDataFrame` object of the original input lake data.
 - "elev" - A `RasterLayer` representing the elevation in a suitably large area around the lake.
@@ -97,7 +97,7 @@ Each of the remaining functions expects a `lakeMorpho` object as input and retur
 
 **calcLakeMetrics** 
 
-The `calcLakeMetrics()` function is a convenience function that will calculate all of the `lakemorpho` metrics for a single `lakeMorpho` object.  It requires an input `lakeMorpho` object as well as a `bearing` a required argument for `lakeFetch` and `pointDens` an argument needed for maximum lake length and width (defined below).
+The `calcLakeMetrics` function is a convenience function that will calculate all of the `lakemorpho` metrics for a single `lakeMorpho` object.  It requires an input `lakeMorpho` object as well as a `bearing` a required argument for `lakeFetch` and `pointDens` an argument needed for maximum lake length and width (defined below).
 
 ```{r calcLakeMetrics_example}
 calcLakeMetrics(example_lakeMorpho, 0, 250)
@@ -105,7 +105,7 @@ calcLakeMetrics(example_lakeMorpho, 0, 250)
 
 **lakeFetch**
 
-Fetch is the maximum open water distance in a given direction and can be used an indicator of mixing as greater fetch implies greater potential for waves due to wind effects [@scheffer2004ecology]. The `lakeFetch()` function calculates fetch along an input bearing.  The input bearing may be any value from 0 to 360 where 0 and 360 both represent north, although the fetch for opposite directions (e.g. east and west) are identical.
+Fetch is the maximum open water distance in a given direction and can be used an indicator of mixing as greater fetch implies greater potential for waves due to wind effects [@scheffer2004ecology]. The `lakeFetch` function calculates fetch along an input bearing.  The input bearing may be any value from 0 to 360 where 0 and 360 both represent north, although the fetch for opposite directions (e.g. east and west) are identical.
 
 To calculate the fetch of an input lake use:
 
@@ -130,7 +130,7 @@ lakeMajorAxisLength(example_lakeMorpho, addLine = TRUE)
 
 **lakeMaxDepth**	
 
-Maximum lake depth provides information that may be used, along with flow rates, to estimate the residence time of a lake.  While there is no substitute for field verified measurements, maximum lake depth may be estimated from the surrounding topography. The `lakeMaxDepth()` function uses the methods outlined in Hollister *et al* [-@hollister2011predicting] to provide an estimate of the maximum lake depth.  It requires only a `lakeMorpho` object as input.  Optionally, a correction factor based off of verified depth data may be specified if one is known.
+Maximum lake depth provides information that may be used, along with flow rates, to estimate the residence time of a lake.  While there is no substitute for field verified measurements, maximum lake depth may be estimated from the surrounding topography. The `lakeMaxDepth` function uses the methods outlined in Hollister *et al* [-@hollister2011predicting] to provide an estimate of the maximum lake depth.  It requires only a `lakeMorpho` object as input.  Optionally, a correction factor based off of verified depth data may be specified if one is known.
 
 To calculate maximum depth use:
 
@@ -156,7 +156,7 @@ The `pointDens` parameter can have an impact on both the processing time and the
 
 **lakeMaxWidth**
 
-Maximum lake width is the maximum shore to shore distance that is perpendicular to the line representing maximum lake length and is another metric related to mixing [@lakewatch2001department; @wetzel2001limnology].  The `lakeMaxWidth` function requires a `lakeMorpho` object and `pointDens` value which is used to determine the number of points along the maximum lake length line. The issue with `pointDens`, discussed above, also exists for the use of `pointDens` with `lakeMaxWidth()` and care should be taken to determine an appropriate number of lines to test.
+Maximum lake width is the maximum shore to shore distance that is perpendicular to the line representing maximum lake length and is another metric related to mixing [@lakewatch2001department; @wetzel2001limnology].  The `lakeMaxWidth` function requires a `lakeMorpho` object and `pointDens` value which is used to determine the number of points along the maximum lake length line. The issue with `pointDens`, discussed above, also exists for the use of `pointDens` with `lakeMaxWidth` and care should be taken to determine an appropriate number of lines to test.
 
 Usage of lakeMaxWidth is:
 
@@ -181,7 +181,7 @@ lakeMeanDepth(inputLM, zmax = 32)
 
 **lakeMeanWidth**
 
-The mean width of a lake is defined as lake area divided by maximum lake length [@lakewatch2001department; @wetzel2001limnology].  Input for this function is a `lakeMorpho` object that has the maximum lake length line added via 'lakeMaxLength()`.  This requirement is checked and returns an error if the maximum length line is missing.
+The mean width of a lake is defined as lake area divided by maximum lake length [@lakewatch2001department; @wetzel2001limnology].  Input for this function is a `lakeMorpho` object that has the maximum lake length line added via 'lakeMaxLength`.  This requirement is checked and returns an error if the maximum length line is missing.
 
 
 ```{r lakeMeanWidthExample}
@@ -246,7 +246,7 @@ A common application of `lakemorpho` is to calculate the full suite of lake metr
 
 ## Read in data
 
-This use case relies on the `sp` and `rgdal` packages for the spatial data handling.  These are dependencies for `lakemorpho`, thus no additional installs are required.  To read in the data we utilized `rgdal::readOGR()` and read in the `ri_lakes.shp` from the current directory.
+This use case relies on the `sp` and `rgdal` packages for the spatial data handling.  These are dependencies for `lakemorpho`, thus no additional installs are required.  To read in the data we utilized `rgdal::readOGR` and read in the `ri_lakes.shp` from the current directory.
 
 ```{r readlakes}
 # Load packages
@@ -260,7 +260,7 @@ ri_lakes <- readOGR(".","ri_lakes")
 
 ## Iterate through lakes and calculate metrics
 
-In R, there are many ways to iterate. For simplicity and clarity we use a `for()` loop to iterate through all lakes and calculate the full suite of lake metrics with `calcLakeMetrics()`.  We will utilize the `elevatr` package which provides access to elevation data from various sources [@hollister_elevatr].  In this example we will use the Amazon Web Services terrain tiles.  The vertical elevation data are in meters and the Rhode Island lake data are projected in Rhode Island State Plane Feet, thus we will convert the elevation data into feet. 
+In R, there are many ways to iterate. For simplicity and clarity we use a `for` loop to iterate through all lakes and calculate the full suite of lake metrics with `calcLakeMetrics`.  We will utilize the `elevatr` package which provides access to elevation data from various sources [@hollister_elevatr].  In this example we will use the Amazon Web Services terrain tiles.  The vertical elevation data are in meters and the Rhode Island lake data are projected in Rhode Island State Plane Feet, thus we will convert the elevation data into feet. 
 
 ```{r calc_all, cache=TRUE}
 library(elevatr)
