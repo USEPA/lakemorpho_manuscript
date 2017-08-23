@@ -3,3 +3,9 @@
 .RData
 .Ruserdata
 clearance
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
