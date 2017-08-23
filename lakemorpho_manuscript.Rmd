@@ -64,7 +64,7 @@ pulling spatial data into R (e.g. as shapefiles, tiff, etc.), creating a `lakeMo
 
 ### The `lakeMorpho` Class and `lakeSurroundTopo`  
 
-Many of the lake morphometry metrics rely on the same information about the lake.  For instance, the functions to estimate maximum depth, mean depth, and volume rely on statistical summaries of the surrounding topography as well as the maximum in-lake distance to shoreline [@hollister2011predicting; @hollister2010volume]. To avoid recalculating these values, a `lakeMorpho` S3 class was created to link information on surrounding topography to the original datasets and facilitate default plotting of the outputs. All lake morphometry functions in the the `lakemorpho` package require an object of class `lakeMorpho` as input. Some functions also return an updated `lakeMorpho` object that includes calculated spatial objects as output. At a minimum, a `lakeMorpho` object contains:
+Many of the lake morphometry metrics rely on the same information about the lake.  For instance, the functions to estimate maximum depth, mean depth, and volume rely on statistical summaries of the surrounding topography as well as the maximum in-lake distance to shoreline [@hollister2011predicting; @hollister2010volume]. To avoid recalculating these values, a `lakeMorpho` S3 class was created to link information on surrounding topography to the original datasets and facilitate default plotting of the outputs. All lake morphometry functions in the the `lakemorpho` package require an object of class `lakeMorpho` as input. Some functions also return an updated `lakeMorpho` object that includes calculated spatial objects as output. At a minimum, a `lakeMorpho` object contains (Figure 1):
 
 - "lake" - A `SpatialPolygons` or `SpatialPolygonsDataFrame` object of the original input lake data.
 - "elev" - A `RasterLayer` representing the elevation in a suitably large area around the lake.
@@ -143,7 +143,7 @@ It is important to note that the accuracies of these maximum depth predictions d
 
 **lakeMaxLength**
 
-Maximum lake length is the longest open water distance within a lake and, similar to fetch, is a metric that can be used to estimate mixing potential [@lakewatch2001department; @wetzel2001limnology].  The current implementation of this calculation in `lakemorpho` places points at equal distances along the shoreline of the lake and then finds the longest point-to-point distance that also does not intersect land (e.g. peninsulas or islands).  This value is returned as the maximum lake length.  An optional parameter, with a default value of `TRUE` allows the `SpatialLines` object to be stored on the input `lakeMorpho` object.
+Maximum lake length is the longest open water distance within a lake and, similar to fetch, is a metric that can be used to estimate mixing potential [@lakewatch2001department; @wetzel2001limnology].  The current implementation of this calculation in `lakemorpho` places points at equal distances along the shoreline of the lake and then finds the longest point-to-point distance that also does not intersect land (e.g. peninsulas or islands).  This value is returned as the maximum lake length. The optional parameter `addLine` has a default value of `TRUE` and allows the `SpatialLines` object to be stored on the input `lakeMorpho` object (Figure 2).
 
 To calculate maximum lake length use:
 
@@ -321,7 +321,15 @@ does not endorse any commercial products, services, or enterprises. This contrib
 
 # Figures
 
-Figure 1. Map of lakes used in case study example of the `lakemorpho` package.
+Figure 1. Diagram of `lakemorpho` object.
+
+![diagram_structure](diagram_structure.tif)
+
+Figure 2. Diagram of `addLines` adding selected lines to the `lakemorpho` object.
+
+![diagram_lines](diagram_lines.tif)
+
+Figure 3. Map of lakes used in case study example of the `lakemorpho` package.
 
 ```{r casestudymap,echo=FALSE,cache=FALSE,message=FALSE,warning=FALSE}
 library(sf)
