@@ -53,7 +53,7 @@ Recent work has demonstrated the ability to estimate many of these metrics from 
 
 ## Implementation in R
 
-Using R as a Geographic Information System is now possible as several packages provide spatial data handling, geospatial analysis, and visualization.  It is because of these packages that `lakemorpho` was  implemented as an R package.  In particular, `lakemorpho` relies on the following packages: `maptools`, `rgdal`, `raster`, `rgeos`, `sp`, and `geosphere`[@bivand2014maptools;@bivand2014rgdal;@bivand2014rgeos;@bivand2008applied;@pebesma2005sp;@hijmans2014raster;@hijmans2014geosphere].  In addition to these packages two external libraries, the Geospatial Data Abstraction Library (GDAL) and Geometry Engine, Open Source (GEOS), are needed.  Their availability to R and installation varies by operating system [@GDAL2012;@GEOS2013].  
+Using R as a Geographic Information System is now possible as several packages provide spatial data handling, geospatial analysis, and visualization.  It is because of these packages that `lakemorpho` was  implemented as an R package[@lakemorpho2016].  In particular, `lakemorpho` relies on the following packages: `maptools`, `rgdal`, `raster`, `rgeos`, `sp`, and `geosphere`[@bivand2014maptools;@bivand2014rgdal;@bivand2014rgeos;@bivand2008applied;@pebesma2005sp;@hijmans2014raster;@hijmans2014geosphere].  In addition to these packages two external libraries, the Geospatial Data Abstraction Library (GDAL) and Geometry Engine, Open Source (GEOS), are needed.  Their availability to R and installation varies by operating system [@GDAL2012;@GEOS2013].  
 
 ## Using `lakemorpho`
 
