@@ -299,7 +299,7 @@ install.packages('lakemorpho')
 library('lakemorpho')
 ```
 
-To access the help pages (including a version of this manuscript) use.
+To access the help pages use:
 
 ```{r, eval=FALSE} 
 help(package='lakemorpho')
@@ -313,6 +313,8 @@ library('devtools')
 install_github('USEPA/lakemorpho')
 library(lakemorpho)
 ```
+
+This manuscript and all example code and data are also available via GitHub and archived via Zenodo [@lakemorpho_manuscript].
 
 # Acknowledgements 
 
