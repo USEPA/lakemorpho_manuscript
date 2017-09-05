@@ -246,7 +246,7 @@ A common application of `lakemorpho` is to calculate the full suite of lake metr
 
 ## Read in data
 
-This use case relies on the `sp` and `rgdal` packages for the spatial data handling.  These are dependencies for `lakemorpho`, thus no additional installs are required.  To read in the data we utilized `rgdal::readOGR` and read in the `ri_lakes.shp` from the current directory.
+This use case relies on the `sp` and `rgdal` packages for the spatial data handling.  These are dependencies for `lakemorpho`, thus no additional installs are required.  To read in the data we utilized `rgdal::readOGR` and read in the `ri_lakes.shp` from the current directory.  This file is available for download from <https://github.com/USEPA/lakemorpho_manuscript/blob/master/ri_lakes.zip>.
 
 ```{r readlakes}
 # Load packages
@@ -314,7 +314,9 @@ install_github('USEPA/lakemorpho')
 library(lakemorpho)
 ```
 
-This manuscript and all example code and data are also available via GitHub and archived via Zenodo [@lakemorpho_manuscript].
+## Archived source code and data at time of publication:
+
+<https://dx.doi.org/10.5281/zenodo.863051>
 
 # Acknowledgements 
 
