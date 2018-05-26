@@ -316,7 +316,7 @@ library(lakemorpho)
 
 ## Archived source code and data at time of publication:
 
-<https://dx.doi.org/10.5281/zenodo.863051>
+<https://doi.org/10.5281/zenodo.863051>
 
 # Acknowledgements 
 
